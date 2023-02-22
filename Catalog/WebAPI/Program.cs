@@ -1,6 +1,10 @@
+#pragma warning disable ASP0014 // Suggest using top level route registrations
+
 using CatalogWebAPI.Configurations;
 using CatalogWebAPI.Data;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Services.Implementations;
+using WebAPI.Services.Interfaces;
 
 namespace CatalogWebAPI
 {
@@ -14,12 +18,29 @@ namespace CatalogWebAPI
             builder.Services.AddControllers();
             // Bind data from appsettings.json to CatalogConfig properties
             builder.Services.Configure<CatalogConfig>(configuration);
+            builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddDbContextFactory<ApplicationDbContext>(options
                 => options.UseNpgsql(configuration["ConnectionString"]));
+            // Needed for easier maintenance and unit testing (generic is beneficial for unit testing)
+            builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>,
+                DbContextWrapper<ApplicationDbContext>>();
 
             var app = builder.Build();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                // This route uses the convention of "ControllerName/ActionName/{id?}"
+                endpoints.MapDefaultControllerRoute();
+                // Maps all other routes for controller action methods.
+                endpoints.MapControllers();
+            });
 
             await CreateDbIfNotExistsAsync(app);
 
