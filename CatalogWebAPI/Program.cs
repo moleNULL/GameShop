@@ -1,40 +1,57 @@
+using CatalogWebAPI.Configurations;
+using CatalogWebAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace CatalogWebAPI
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
+            var configuration = GetConfiguration();
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
+            builder.Services.Configure<CatalogConfig>(configuration);
+            builder.Services.AddAutoMapper(typeof(Program));
 
+            builder.Services.AddDbContextFactory<ApplicationDbContext>(options
+                => options.UseNpgsql(configuration["ConnectionString"]));
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-
-            app.UseAuthorization();
-
-            var summaries = new[]
-            {
-                "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-            };
-
-            app.MapGet("/weatherforecast", (HttpContext httpContext) =>
-            {
-                var forecast = Enumerable.Range(1, 5).Select(index =>
-                    new WeatherForecast
-                    {
-                        Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                        TemperatureC = Random.Shared.Next(-20, 55),
-                        Summary = summaries[Random.Shared.Next(summaries.Length)]
-                    })
-                    .ToArray();
-                return forecast;
-            });
+            await CreateDbIfNotExistsAsync(app);
 
             app.Run();
+        }
+
+        private static IConfiguration GetConfiguration()
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
+            
+            return builder.Build();
+        }
+
+        private static async Task CreateDbIfNotExistsAsync(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+                    await DbInitializer.SeedAsync(dbContext);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occured while creating the database");
+                }
+            }
         }
     }
 }
