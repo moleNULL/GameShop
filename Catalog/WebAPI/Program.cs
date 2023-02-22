@@ -2,9 +2,8 @@
 
 using CatalogWebAPI.Configurations;
 using CatalogWebAPI.Data;
+using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using WebAPI.Services.Implementations;
-using WebAPI.Services.Interfaces;
 
 namespace CatalogWebAPI
 {
@@ -16,6 +15,7 @@ namespace CatalogWebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+
             // Bind data from appsettings.json to CatalogConfig properties
             builder.Services.Configure<CatalogConfig>(configuration);
             builder.Services.AddSwaggerGen();
@@ -23,6 +23,7 @@ namespace CatalogWebAPI
 
             builder.Services.AddDbContextFactory<ApplicationDbContext>(options
                 => options.UseNpgsql(configuration["ConnectionString"]));
+
             // Needed for easier maintenance and unit testing (generic is beneficial for unit testing)
             builder.Services.AddScoped<IDbContextWrapper<ApplicationDbContext>,
                 DbContextWrapper<ApplicationDbContext>>();
@@ -38,6 +39,7 @@ namespace CatalogWebAPI
             {
                 // This route uses the convention of "ControllerName/ActionName/{id?}"
                 endpoints.MapDefaultControllerRoute();
+
                 // Maps all other routes for controller action methods.
                 endpoints.MapControllers();
             });
@@ -53,7 +55,7 @@ namespace CatalogWebAPI
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(path: "appsettings.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-            
+
             return builder.Build();
         }
 

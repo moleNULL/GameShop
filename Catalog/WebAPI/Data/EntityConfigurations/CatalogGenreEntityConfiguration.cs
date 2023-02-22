@@ -6,7 +6,7 @@ namespace CatalogWebAPI.Data.EntityConfigurations
 {
     public class CatalogGenreEntityConfiguration : IEntityTypeConfiguration<CatalogGenreEntity>
     {
-        public void Configure(EntityTypeBuilder<CatalogGenreEntity> builder) 
+        public void Configure(EntityTypeBuilder<CatalogGenreEntity> builder)
         {
             builder.ToTable("CatalogGenre");
 

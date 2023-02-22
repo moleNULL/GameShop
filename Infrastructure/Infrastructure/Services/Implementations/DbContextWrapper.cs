@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using WebAPI.Services.Interfaces;
 
-namespace WebAPI.Services.Implementations
+namespace Infrastructure.Services.Interfaces
 {
-    public class DbContextWrapper<T> : IDbContextWrapper<T> where T : DbContext
+    public class DbContextWrapper<T> : IDbContextWrapper<T>
+        where T : DbContext
     {
         private readonly T _dbContext;
 
