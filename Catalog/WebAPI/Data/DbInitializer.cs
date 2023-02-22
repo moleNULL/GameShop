@@ -19,6 +19,12 @@ namespace CatalogWebAPI.Data
                 await dbContext.CatalogGenres.AddRangeAsync(GetPreconfiguredGenres());
                 await dbContext.SaveChangesAsync();
             }
+
+            if (!dbContext.CatalogItems.Any())
+            {
+                await dbContext.CatalogItems.AddRangeAsync(GetPreconfiguredItems());
+                await dbContext.SaveChangesAsync();
+            }
         }
 
         private static IEnumerable<CatalogCompanyEntity> GetPreconfiguredCompanies()

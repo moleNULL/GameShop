@@ -12,6 +12,7 @@ namespace CatalogWebAPI
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddControllers();
+            // Bind data from appsettings.json to CatalogConfig properties
             builder.Services.Configure<CatalogConfig>(configuration);
             builder.Services.AddAutoMapper(typeof(Program));
 
