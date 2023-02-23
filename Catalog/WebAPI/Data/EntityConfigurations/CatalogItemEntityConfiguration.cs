@@ -12,6 +12,10 @@ namespace CatalogWebAPI.Data.EntityConfigurations
 
             builder.HasKey(ci => ci.Id);
 
+            builder.Property(ci => ci.Id)
+                .UseHiLo("catalog_item_hilo")
+                .IsRequired();
+
             builder.Property(ci => ci.Name).IsRequired().HasMaxLength(50);
             builder.Property(ci => ci.Price).IsRequired();
             builder.Property(ci => ci.Year).IsRequired();

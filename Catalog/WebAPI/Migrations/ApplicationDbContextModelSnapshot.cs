@@ -21,13 +21,22 @@ namespace WebAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.HasSequence("catalog_company_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("catalog_genre_hilo")
+                .IncrementsBy(10);
+
+            modelBuilder.HasSequence("catalog_item_hilo")
+                .IncrementsBy(10);
+
             modelBuilder.Entity("CatalogWebAPI.Data.Entities.CatalogCompanyEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "catalog_company_hilo");
 
                     b.Property<string>("Company")
                         .IsRequired()
@@ -45,7 +54,7 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "catalog_genre_hilo");
 
                     b.Property<string>("Genre")
                         .IsRequired()
@@ -63,7 +72,7 @@ namespace WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseHiLo(b.Property<int>("Id"), "catalog_item_hilo");
 
                     b.Property<int>("AvailableStock")
                         .HasColumnType("integer");

@@ -26,6 +26,7 @@ namespace CatalogWebAPI
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddTransient<ICatalogService, CatalogService>();
+            builder.Services.AddTransient<ICatalogItemService, CatalogItemService>();
             builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
 
             builder.Services.AddDbContextFactory<ApplicationDbContext>(options

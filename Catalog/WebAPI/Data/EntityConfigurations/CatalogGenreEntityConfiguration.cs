@@ -12,6 +12,10 @@ namespace CatalogWebAPI.Data.EntityConfigurations
 
             builder.HasKey(cg => cg.Id);
 
+            builder.Property(cg => cg.Id)
+                .UseHiLo("catalog_genre_hilo")
+                .IsRequired();
+
             builder.Property(cg => cg.Genre).IsRequired().HasMaxLength(100);
         }
     }

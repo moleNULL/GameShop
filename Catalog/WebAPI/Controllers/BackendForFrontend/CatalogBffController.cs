@@ -13,13 +13,9 @@ namespace WebAPI.Controllers.BackendForFrontend
     public class CatalogBffController : ControllerBase
     {
         private readonly ICatalogService _catalogService;
-        private readonly ILogger<CatalogBffController> _logger;
 
-        public CatalogBffController(
-            ILogger<CatalogBffController> logger,
-            ICatalogService catalogService)
+        public CatalogBffController(ICatalogService catalogService)
         {
-            _logger = logger;
             _catalogService = catalogService;
         }
 

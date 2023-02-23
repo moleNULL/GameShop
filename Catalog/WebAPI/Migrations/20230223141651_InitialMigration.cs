@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -11,12 +10,23 @@ namespace WebAPI.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence(
+                name: "catalog_company_hilo",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "catalog_genre_hilo",
+                incrementBy: 10);
+
+            migrationBuilder.CreateSequence(
+                name: "catalog_item_hilo",
+                incrementBy: 10);
+
             migrationBuilder.CreateTable(
                 name: "CatalogCompany",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     Company = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false)
                 },
                 constraints: table =>
@@ -28,8 +38,7 @@ namespace WebAPI.Migrations
                 name: "CatalogGenre",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     Genre = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -41,8 +50,7 @@ namespace WebAPI.Migrations
                 name: "Catalog",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
@@ -90,6 +98,15 @@ namespace WebAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "CatalogGenre");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_company_hilo");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_genre_hilo");
+
+            migrationBuilder.DropSequence(
+                name: "catalog_item_hilo");
         }
     }
 }
