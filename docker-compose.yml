@@ -22,6 +22,9 @@ services:
       - 80:80
     extra_hosts:
       - "www.alevelwebsite.com:192.168.0.1"
+    volumes:
+      - ./Proxy/gateway/nginx/conf.d:/etc/nginx/conf.d
+      - ./Proxy/assets:/var/www/assets
   pgadmin4:
     image: dpage/pgadmin4
     container_name: lde.pgadmin4
