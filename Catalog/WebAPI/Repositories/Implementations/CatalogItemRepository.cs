@@ -1,9 +1,11 @@
-﻿using CatalogWebAPI.Data;
+﻿using System.Net.WebSockets;
+using CatalogWebAPI.Data;
 using CatalogWebAPI.Data.Entities;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Data;
 using WebAPI.Repositories.Interfaces;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebAPI.Repositories.Implementations
 {
@@ -21,6 +23,50 @@ namespace WebAPI.Repositories.Implementations
         {
             _dbContext = dbContextWrapper.DbContext;
             _logger = logger;
+        }
+
+        public async Task<CatalogItemEntity> GetByIdAsync(int id)
+        {
+            var item = await _dbContext.CatalogItems
+                .Include(ci => ci.CatalogCompany)
+                .Include(ci => ci.CatalogGenre)
+                .FirstOrDefaultAsync(ci => ci.Id == id);
+
+            return item ?? new CatalogItemEntity();
+        }
+
+        public async Task<List<CatalogItemEntity>> GetByCompanyAsync(string company)
+        {
+            var items = await _dbContext.CatalogItems
+                .Include(ci => ci.CatalogCompany)
+                .Include(ci => ci.CatalogGenre)
+                .Where(ci => ci.CatalogCompany.Company == company)
+                .ToListAsync();
+
+            return items ?? new List<CatalogItemEntity>();
+        }
+
+        public async Task<List<CatalogItemEntity>> GetByGenreAsync(string genre)
+        {
+            var items = await _dbContext.CatalogItems
+                .Include(ci => ci.CatalogCompany)
+                .Include(ci => ci.CatalogGenre)
+                .Where(ci => ci.CatalogGenre.Genre == genre)
+                .ToListAsync();
+
+            return items ?? new List<CatalogItemEntity>();
+        }
+
+        public async Task<List<CatalogCompanyEntity>> GetCompaniesAsync()
+        {
+            var companies = await _dbContext.CatalogCompanies.ToListAsync();
+            return companies ?? new List<CatalogCompanyEntity>();
+        }
+
+        public async Task<List<CatalogGenreEntity>> GetGenresAsync()
+        {
+            var genres = await _dbContext.CatalogGenres.ToListAsync();
+            return genres ?? new List<CatalogGenreEntity>();
         }
 
         public async Task<int?> AddAsync(string name, decimal price, int year, string pictureFileName, int availablestock, int companyId, int genreId)
