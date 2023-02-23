@@ -4,6 +4,10 @@ using CatalogWebAPI.Configurations;
 using CatalogWebAPI.Data;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using WebAPI.Repositories.Implementations;
+using WebAPI.Repositories.Interfaces;
+using WebAPI.Services.Implementations;
+using WebAPI.Services.Interfaces;
 
 namespace CatalogWebAPI
 {
@@ -20,6 +24,9 @@ namespace CatalogWebAPI
             builder.Services.Configure<CatalogConfig>(configuration);
             builder.Services.AddSwaggerGen();
             builder.Services.AddAutoMapper(typeof(Program));
+
+            builder.Services.AddTransient<ICatalogService, CatalogService>();
+            builder.Services.AddTransient<ICatalogItemRepository, CatalogItemRepository>();
 
             builder.Services.AddDbContextFactory<ApplicationDbContext>(options
                 => options.UseNpgsql(configuration["ConnectionString"]));

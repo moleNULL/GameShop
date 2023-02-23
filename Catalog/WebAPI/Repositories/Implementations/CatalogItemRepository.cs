@@ -49,6 +49,7 @@ namespace WebAPI.Repositories.Implementations
             var itemList = await _dbContext.CatalogItems
                 .Include(i => i.CatalogCompany)
                 .Include(i => i.CatalogGenre)
+                .OrderBy(ci => ci.Id)
                 .Skip(pageIndex * pageSize) // 0 * 6 = skip 0, then 1 * 6 - skip first 6 items and so on
                 .Take(pageSize) // take 6 items
                 .ToListAsync();
