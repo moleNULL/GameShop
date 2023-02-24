@@ -35,9 +35,9 @@ namespace WebAPI.Services.Implementations
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
-                object resultDto = _mapper.Map(resultEntity, typeof(CatalogItemEntity), typeof(CatalogItemDto));
+                var resultDto = _mapper.Map<CatalogItemDto>(resultEntity);
 
-                return (CatalogItemDto)resultDto;
+                return resultDto;
             });
         }
 
@@ -45,10 +45,10 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var resultEntity = await _catalogItemRepository.GetByCompanyAsync(company);
-                object resultDto = _mapper.Map(resultEntity, typeof(List<CatalogItemEntity>), typeof(List<CatalogItemDto>));
+                var resultEntities = await _catalogItemRepository.GetByCompanyAsync(company);
+                var resultDtos = _mapper.Map<List<CatalogItemDto>>(resultEntities);
 
-                return (List<CatalogItemDto>)resultDto;
+                return resultDtos;
             });
         }
 
@@ -56,10 +56,10 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var resultEntity = await _catalogItemRepository.GetByGenreAsync(genre);
-                object resultDto = _mapper.Map(resultEntity, typeof(List<CatalogItemEntity>), typeof(List<CatalogItemDto>));
+                var resultEntities = await _catalogItemRepository.GetByGenreAsync(genre);
+                var resultDtos = _mapper.Map<List<CatalogItemDto>>(resultEntities);
 
-                return (List<CatalogItemDto>)resultDto;
+                return resultDtos;
             });
         }
 
@@ -67,10 +67,10 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
-                var resultEntity = await _catalogItemRepository.GetCompaniesAsync();
-                object resultDto = _mapper.Map(resultEntity, typeof(List<CatalogCompanyEntity>), typeof(List<CatalogCompanyDto>));
+                var resultEntities = await _catalogItemRepository.GetCompaniesAsync();
+                var resultDto = _mapper.Map<List<CatalogCompanyDto>>(resultEntities);
 
-                return (List<CatalogCompanyDto>)resultDto;
+                return resultDto;
             });
         }
 
@@ -79,9 +79,9 @@ namespace WebAPI.Services.Implementations
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetGenresAsync();
-                object resultDto = _mapper.Map(resultEntity, typeof(List<CatalogGenreEntity>), typeof(List<CatalogGenreDto>));
+                var resultDto = _mapper.Map<List<CatalogGenreDto>>(resultEntity);
 
-                return (List<CatalogGenreDto>)resultDto;
+                return resultDto;
             });
         }
 

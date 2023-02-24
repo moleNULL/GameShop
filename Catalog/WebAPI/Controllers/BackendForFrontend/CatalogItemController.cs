@@ -3,6 +3,7 @@ using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.Requests;
 using WebAPI.Models.Responses;
+using WebAPI.Services.Implementations;
 using WebAPI.Services.Interfaces;
 
 namespace WebAPI.Controllers.BackendForFrontend
@@ -20,7 +21,7 @@ namespace WebAPI.Controllers.BackendForFrontend
 
         [HttpPost]
         [ProducesResponseType(typeof(AddItemResponse<int?>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> AddAsync(CreateItemRequest request)
+        public async Task<IActionResult> CreateAsync(CreateItemRequest request)
         {
             var result = await _catalogItemService.AddAsync(
                 request.Name, request.Price, request.Year, request.PictureFileName, request.AvailableStock, request.CatalogCompanyId, request.CatalogGenreId);
@@ -29,10 +30,10 @@ namespace WebAPI.Controllers.BackendForFrontend
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(RemoveItemResponse<bool>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> RemoveAsync(RemoveItemRequest request)
+        [ProducesResponseType(typeof(ItemResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> ReadAsync(ItemByIdRequest request)
         {
-            var result = await _catalogItemService.RemoveAsync(request.Id);
+            var result = await _catalogItemService.GetAsync(request.Id);
 
             return Ok(result);
         }
@@ -42,6 +43,15 @@ namespace WebAPI.Controllers.BackendForFrontend
         public async Task<IActionResult> UpdateAsync(UpdateItemRequest request)
         {
             var result = await _catalogItemService.UpdateAsync(request.Id, request.Name, request.Price, request.Year, request.PictureFileName, request.AvailableStock, request.CatalogCompanyId, request.CatalogGenreId);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(RemoveItemResponse<bool>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteAsync(RemoveItemRequest request)
+        {
+            var result = await _catalogItemService.RemoveAsync(request.Id);
 
             return Ok(result);
         }
