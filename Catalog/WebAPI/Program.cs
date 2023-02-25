@@ -1,9 +1,12 @@
 #pragma warning disable ASP0014 // Suggest using top level route registrations
 
+using System.Reflection;
 using System.Text.Json;
 using CatalogWebAPI.Configurations;
 using CatalogWebAPI.Data;
+using Infrastructure.Filters;
 using Infrastructure.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Repositories.Implementations;
 using WebAPI.Repositories.Interfaces;
@@ -19,11 +22,25 @@ namespace CatalogWebAPI
             var configuration = GetConfiguration();
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+                options.Filters.Add(typeof(HttpGlobalValidationActionFilter));
+                options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
+            }).AddJsonOptions(jsoptions => jsoptions.JsonSerializerOptions.WriteIndented = true);
+
+            builder.Services.AddControllers()
+                .ConfigureApiBehaviorOptions(options =>
+                {
+                    options.SuppressModelStateInvalidFilter = true;
+                });
 
             // Bind data from appsettings.json to CatalogConfig properties
             builder.Services.Configure<CatalogConfig>(configuration);
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SwaggerAnnotation.xml"));
+            });
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddTransient<ICatalogService, CatalogService>();
@@ -39,7 +56,7 @@ namespace CatalogWebAPI
 
             var app = builder.Build();
 
-            app.UseSwagger();
+            app.UseSwagger(c => c.SerializeAsV2 = true);
             app.UseSwaggerUI();
 
             app.UseRouting();

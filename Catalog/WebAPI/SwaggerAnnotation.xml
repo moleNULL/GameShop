@@ -1,0 +1,146 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:WebAPI.Migrations.InitialMigration">
+            <inheritdoc />
+        </member>
+        <member name="M:WebAPI.Migrations.InitialMigration.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebAPI.Migrations.InitialMigration.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:WebAPI.Migrations.InitialMigration.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.Name">
+            <summary>
+            Gets or sets the name of the item
+            </summary>
+            <example>ExampleGame</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.Price">
+            <summary>
+            Gets or sets the price of the item
+            </summary>
+            <example>0,01</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.Year">
+            <summary>
+            Gets or sets the year of the item
+            </summary>
+            <example>2003</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.PictureFileName">
+            <summary>
+            Gets or sets the pictureFileName of the item
+            </summary>
+            <example>example.png</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.AvailableStock">
+            <summary>
+            Gets or sets the availableStock of the item
+            </summary>
+            <example>0</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.CatalogCompanyId">
+            <summary>
+            Gets or sets the catalogCompanyId of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.CreateItemRequest.CatalogGenreId">
+            <summary>
+            Gets or sets the catalogGenreId of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.ItemByCompanyRequest.Company">
+            <summary>
+            Gets or sets the company of the item
+            </summary>
+            <example>Valve</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.ItemByGenreRequest.Genre">
+            <summary>
+            Gets or sets the genre of the item
+            </summary>
+            <example>RPG</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.ItemByIdRequest.Id">
+            <summary>
+            Gets or sets the id of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.PaginatedItemsRequest.PageIndex">
+            <summary>
+            Gets or sets the pageIndex of the item
+            </summary>
+            <example>0</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.PaginatedItemsRequest.PageSize">
+            <summary>
+            Gets or sets the pageSize of the item
+            </summary>
+            <example>6</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.RemoveItemRequest.Id">
+            <summary>
+            Gets or sets the id of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.Id">
+            <summary>
+            Gets or sets the id of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.Name">
+            <summary>
+            Gets or sets the name of the item
+            </summary>
+            <example>ExampleGame</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.Price">
+            <summary>
+            Gets or sets the price of the item
+            </summary>
+            <example>0,01</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.Year">
+            <summary>
+            Gets or sets the year of the item
+            </summary>
+            <example>2003</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.PictureFileName">
+            <summary>
+            Gets or sets the pictureFileName of the item
+            </summary>
+            <example>example.png</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.AvailableStock">
+            <summary>
+            Gets or sets the availableStock of the item
+            </summary>
+            <example>0</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.CatalogCompanyId">
+            <summary>
+            Gets or sets the catalogCompanyId of the item
+            </summary>
+            <example>1</example>
+        </member>
+        <member name="P:WebAPI.Models.Requests.UpdateItemRequest.CatalogGenreId">
+            <summary>
+            Gets or sets the catalogGenreId of the item
+            </summary>
+            <example>1</example>
+        </member>
+    </members>
+</doc>

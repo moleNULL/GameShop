@@ -7,7 +7,7 @@ using Infrastructure.Services.Interfaces;
 using WebAPI.Repositories.Interfaces;
 using AutoMapper;
 using CatalogWebAPI.Data.Entities;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Infrastructure.Exceptions;
 
 namespace WebAPI.Services.Implementations
 {
@@ -34,6 +34,11 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
+                if (id < 1)
+                {
+                    throw new BusinessException($"Id must not be negative. Provided id: {id}");
+                }
+
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
                 var resultDto = _mapper.Map<CatalogItemDto>(resultEntity);
 
@@ -45,6 +50,11 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
+                if (string.IsNullOrWhiteSpace(company))
+                {
+                    throw new BusinessException($"Company must not be null, empty or only whitespaces");
+                }
+
                 var resultEntities = await _catalogItemRepository.GetByCompanyAsync(company);
                 var resultDtos = _mapper.Map<List<CatalogItemDto>>(resultEntities);
 
@@ -56,6 +66,11 @@ namespace WebAPI.Services.Implementations
         {
             return await ExecuteSafeAsync(async () =>
             {
+                if (string.IsNullOrWhiteSpace(genre))
+                {
+                    throw new BusinessException($"Genre must not be null, empty or only whitespaces");
+                }
+
                 var resultEntities = await _catalogItemRepository.GetByGenreAsync(genre);
                 var resultDtos = _mapper.Map<List<CatalogItemDto>>(resultEntities);
 
@@ -91,8 +106,7 @@ namespace WebAPI.Services.Implementations
             {
                 if (pageIndex < 0 || pageSize < 0)
                 {
-                    _logger.LogWarning($"pageIndex or pageSize must be negative");
-                    throw new Exception("pageIndex or pageSize must be negative");
+                    throw new BusinessException("pageIndex or pageSize must not be negative");
                 }
 
                 var result = await _catalogItemRepository.GetItemsByPageAsync(pageIndex, pageSize);

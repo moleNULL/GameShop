@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using CatalogWebAPI.Data;
+using Infrastructure.Exceptions;
 using Infrastructure.Services;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using WebAPI.Models.Dtos;
-using WebAPI.Repositories.Implementations;
 using WebAPI.Repositories.Interfaces;
 using WebAPI.Services.Interfaces;
 
@@ -40,6 +40,11 @@ namespace WebAPI.Services.Implementations
 
         public Task<CatalogItemDto> GetAsync(int id)
         {
+            if (id < 1)
+            {
+                throw new BusinessException($"Id must not be negative. Provided id: {id}");
+            }
+
             return ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
@@ -53,6 +58,11 @@ namespace WebAPI.Services.Implementations
         {
             return ExecuteSafeAsync(async () =>
             {
+                if (id < 1)
+                {
+                    throw new BusinessException($"Id must not be negative. Provided id: {id}");
+                }
+
                 var result = await _catalogItemRepository.UpdateAsync(id, name, price, year, pictureFileName, availableStock, companyId, genreId);
 
                 if (result == EntityState.Modified)
@@ -70,6 +80,11 @@ namespace WebAPI.Services.Implementations
         {
             return ExecuteSafeAsync(async () =>
             {
+                if (id < 1)
+                {
+                    throw new BusinessException($"Id must not be negative. Provided id: {id}");
+                }
+
                 var result = await _catalogItemRepository.RemoveAsync(id);
 
                 if (result == EntityState.Deleted)

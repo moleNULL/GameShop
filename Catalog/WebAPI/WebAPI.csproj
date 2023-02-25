@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -7,7 +7,9 @@
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	<CodeAnalysisRuleSet>../../settings.ruleset</CodeAnalysisRuleSet>
-	<NoWarn>SA0001;SA1633;SA1200</NoWarn>
+	<NoWarn>SA0001;SA1633;SA1200;1591;SA1629;SA1609</NoWarn>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
+	<DocumentationFile>SwaggerAnnotation.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,10 +30,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SwaggerAnnotation.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
