@@ -1,14 +1,16 @@
 ﻿using System.Net;
 using Infrastructure;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Filters;
 using WebAPI.Models.Requests;
 using WebAPI.Models.Responses;
 using WebAPI.Services.Interfaces;
 
-namespace WebAPI.Controllers.BackendForFrontend
+namespace WebAPI.Controllers
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowClientPolicy)]
     [Route(ComponentDefaults.DefaultRoute)]
     public class CatalogItemController : ControllerBase
     {

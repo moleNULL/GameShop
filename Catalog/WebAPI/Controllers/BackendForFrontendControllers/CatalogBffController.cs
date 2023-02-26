@@ -1,5 +1,7 @@
 ﻿using System.Net;
 using Infrastructure;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.Dtos;
 using WebAPI.Models.Requests;
@@ -9,6 +11,7 @@ using WebAPI.Services.Interfaces;
 namespace WebAPI.Controllers.BackendForFrontend
 {
     [ApiController]
+    [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)] // Route("api/v1/[controller]/[action]")
     public class CatalogBffController : ControllerBase
     {

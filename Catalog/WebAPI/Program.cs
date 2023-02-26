@@ -4,10 +4,13 @@ using System.Reflection;
 using System.Text.Json;
 using CatalogWebAPI.Configurations;
 using CatalogWebAPI.Data;
+using Infrastructure.Extensions;
 using Infrastructure.Filters;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using WebAPI.Repositories.Implementations;
 using WebAPI.Repositories.Interfaces;
 using WebAPI.Services.Implementations;
@@ -27,20 +30,54 @@ namespace CatalogWebAPI
                 options.Filters.Add(typeof(HttpGlobalExceptionFilter));
                 options.Filters.Add(typeof(HttpGlobalValidationActionFilter));
                 options.ModelMetadataDetailsProviders.Add(new SystemTextJsonValidationMetadataProvider());
-            }).AddJsonOptions(jsoptions => jsoptions.JsonSerializerOptions.WriteIndented = true);
+            })
+            .AddJsonOptions(jsoptions =>
+            {
+                jsoptions.JsonSerializerOptions.WriteIndented = true;
+            })
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
 
-            builder.Services.AddControllers()
-                .ConfigureApiBehaviorOptions(options =>
+            builder.AddConfiguration();
+            builder.Services.Configure<CatalogConfig>(configuration);
+            builder.Services.AddAuthorization(configuration);
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SwaggerAnnotation.xml"));
+
+                options.SwaggerDoc(name: "v1", info: new OpenApiInfo
                 {
-                    options.SuppressModelStateInvalidFilter = true;
+                    Title = "GameShop - Catalog HTTP API",
+                    Version = "v1",
+                    Description = "The Catalog HTTP API for GameShop"
                 });
 
-            // Bind data from appsettings.json to CatalogConfig properties
-            builder.Services.Configure<CatalogConfig>(configuration);
-            builder.Services.AddSwaggerGen(c =>
-            {
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "SwaggerAnnotation.xml"));
+                string? authority = configuration["Authorization:Authority"];
+                options.AddSecurityDefinition(name: "oauth2", securityScheme: new OpenApiSecurityScheme()
+                {
+                    Type = SecuritySchemeType.OAuth2,
+                    Flows = new OpenApiOAuthFlows()
+                    {
+                        Implicit = new OpenApiOAuthFlow()
+                        {
+                            AuthorizationUrl = new Uri($"{authority}/connect/authorize"),
+                            TokenUrl = new Uri($"{authority}/connect/token"),
+                            Scopes = new Dictionary<string, string>()
+                            {
+                                { "mvc", "website" },
+                                { "catalog.catalogbff", "catalog.catalogbff" },
+                                { "catalog.catalogitem", "catalog.catalogitem" }
+                            }
+                        }
+                    }
+                });
+
+                options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
+
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddTransient<ICatalogService, CatalogService>();
@@ -56,10 +93,13 @@ namespace CatalogWebAPI
 
             var app = builder.Build();
 
-            app.UseSwagger(c => c.SerializeAsV2 = true);
+            app.UseSwagger();
             app.UseSwaggerUI();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
