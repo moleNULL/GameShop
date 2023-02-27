@@ -20,7 +20,7 @@ namespace IdentityServer
             
             services.Configure<AppSettings>(configuration);
 
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0);
 
             services.AddIdentityServer()
                 .AddInMemoryIdentityResources(Config.GetIdentityResources())

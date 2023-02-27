@@ -12,7 +12,7 @@ namespace WebAPI.Models.Dtos
         public string PictureUrl { get; set; } = null!;
         public int AvailableStock { get; set; }
 
-        public CatalogCompanyEntity CatalogCompany { get; set; } = null!;
-        public CatalogGenreEntity CatalogGenre { get; set; } = null!;
+        public CatalogCompanyDto CatalogCompany { get; set; } = null!;
+        public CatalogGenreDto CatalogGenre { get; set; } = null!;
     }
 }

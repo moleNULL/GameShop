@@ -1,5 +1,3 @@
-#pragma warning disable ASP0014 // Suggest using top level route registrations
-
 using System.Reflection;
 using System.Text.Json;
 using CatalogWebAPI.Configurations;
