@@ -42,7 +42,7 @@ namespace MVC.Controllers
 
             var vm = new IndexViewModel()
             {
-                CatalogItems = catalog.ItemsList,
+                CatalogItems = catalog.ItemList,
                 Companies = await _catalogService.GetCompanies(),
                 Genres = await _catalogService.GetGenres(),
                 PaginationInfo = paginationInfo

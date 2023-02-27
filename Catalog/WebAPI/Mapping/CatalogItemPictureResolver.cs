@@ -18,7 +18,7 @@ namespace WebAPI.Mapping
         // object cuz MapFrom() in MappingProfile.cs needs object
         public object Resolve(CatalogItemEntity source, CatalogItemDto destination, string sourceMember, object destMember, ResolutionContext context)
         {
-            return $"{_config.Host}/{_config.ImgUrl}/{sourceMember}";
+            return $"{_config.CdnHost}/{_config.ImgUrl}/{sourceMember}";
         }
     }
 }

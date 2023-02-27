@@ -7,7 +7,6 @@ using Infrastructure.Filters;
 using Infrastructure.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using WebAPI.Repositories.Implementations;
 using WebAPI.Repositories.Interfaces;
