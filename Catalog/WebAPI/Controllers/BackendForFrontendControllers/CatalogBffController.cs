@@ -4,6 +4,7 @@ using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Models.Dtos;
+using WebAPI.Models.Enums;
 using WebAPI.Models.Requests;
 using WebAPI.Models.Responses;
 using WebAPI.Services.Interfaces;
@@ -11,6 +12,7 @@ using WebAPI.Services.Interfaces;
 namespace WebAPI.Controllers.BackendForFrontend
 {
     [ApiController]
+    [AllowAnonymous]
     [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
     [Route(ComponentDefaults.DefaultRoute)] // Route("api/v1/[controller]/[action]")
     public class CatalogBffController : ControllerBase
@@ -24,9 +26,10 @@ namespace WebAPI.Controllers.BackendForFrontend
 
         [HttpPost]
         [ProducesResponseType(typeof(PaginatedItemsResponse<CatalogItemDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetCatalogItemsAsync(PaginatedItemsRequest request)
+        public async Task<IActionResult> GetCatalogItemsAsync(PaginatedItemsRequest<CatalogTypeFilter> request)
         {
-            var result = await _catalogService.GetCatalogItemsAsync(request.PageIndex, request.PageSize);
+            var result = await _catalogService.GetCatalogItemsAsync(
+                request.PageIndex, request.PageSize, request.Filters);
 
             return Ok(result);
         }

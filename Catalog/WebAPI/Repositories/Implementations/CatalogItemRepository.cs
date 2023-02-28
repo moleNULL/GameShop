@@ -14,16 +14,9 @@ namespace WebAPI.Repositories.Implementations
     {
         private readonly ApplicationDbContext _dbContext;
 
-        // info: WebAPI.Repositories.Implementations.CatalogItemRepository[0]
-        // Log message here (unique forr CatalogItemRepository)
-        private readonly ILogger<CatalogItemRepository> _logger;
-
-        public CatalogItemRepository(
-            IDbContextWrapper<ApplicationDbContext> dbContextWrapper,
-            ILogger<CatalogItemRepository> logger)
+        public CatalogItemRepository(IDbContextWrapper<ApplicationDbContext> dbContextWrapper)
         {
             _dbContext = dbContextWrapper.DbContext;
-            _logger = logger;
         }
 
         public async Task<CatalogItemEntity> GetByIdAsync(int id)
@@ -70,14 +63,26 @@ namespace WebAPI.Repositories.Implementations
             return genres ?? new List<CatalogGenreEntity>();
         }
 
-        public async Task<PaginatedItems<CatalogItemEntity>> GetItemsByPageAsync(int pageIndex, int pageSize)
+        public async Task<PaginatedItems<CatalogItemEntity>> GetItemsByPageAsync(
+            int pageIndex, int pageSize, int? companyId, int? genreId)
         {
-            int totalCount = await _dbContext.CatalogItems.CountAsync();
+            IQueryable<CatalogItemEntity> query = _dbContext.CatalogItems;
 
-            var itemList = await _dbContext.CatalogItems
+            if (companyId.HasValue)
+            {
+                query = query.Where(item => item.CatalogCompanyId == companyId.Value);
+            }
+
+            if (genreId.HasValue)
+            {
+                query = query.Where(item => item.CatalogGenreId == genreId.Value);
+            }
+
+            int totalCount = await query.CountAsync();
+
+            var itemList = await query.OrderBy(ci => ci.Id)
                 .Include(i => i.CatalogCompany)
                 .Include(i => i.CatalogGenre)
-                .OrderBy(ci => ci.Id)
                 .Skip(pageIndex * pageSize) // 0 * 6 = skip 0, then 1 * 6 - skip first 6 items and so on
                 .Take(pageSize) // take 6 items
                 .ToListAsync();

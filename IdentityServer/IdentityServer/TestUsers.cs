@@ -13,19 +13,19 @@ namespace IdentityServer4.Quickstart.UI
     {
         public static List<TestUser> Users = new List<TestUser>
         {
-            new TestUser{SubjectId = "818727", Username = "alice", Password = "alice", 
+            new TestUser() { SubjectId = "818727", Username = "user1", Password = "12345", 
                 Claims = 
                 {
-                    new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                    new Claim(JwtClaimTypes.GivenName, "Alice"),
-                    new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                    new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
+                    new Claim(JwtClaimTypes.Name, "Oleksii L."),
+                    new Claim(JwtClaimTypes.GivenName, "Oleksii"),
+                    new Claim(JwtClaimTypes.FamilyName, "L."),
+                    new Claim(JwtClaimTypes.Email, "oleksii_ukr12345@email.com"),
                     new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                    new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'One Hacker Way', 'locality': 'Heidelberg', 'postal_code': 69118, 'country': 'Germany' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
+                    new Claim(JwtClaimTypes.WebSite, "https://oleksii_shop.com"),
+                    new Claim(JwtClaimTypes.Address, @"{ 'street_address': 'Shevchenko', 'locality': 'Kharkiv', 'postal_code': 61175, 'country': 'Ukraine' }", IdentityServer4.IdentityServerConstants.ClaimValueTypes.Json)
                 }
             },
-            new TestUser{SubjectId = "88421113", Username = "bob", Password = "bob", 
+            new TestUser() { SubjectId = "88421113", Username = "bob", Password = "bob", 
                 Claims = 
                 {
                     new Claim(JwtClaimTypes.Name, "Bob Smith"),

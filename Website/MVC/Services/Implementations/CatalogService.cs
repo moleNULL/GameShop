@@ -28,12 +28,12 @@ namespace MVC.Services.Implementations
 
             if (companyFilter.HasValue)
             {
-                filters.Add(CatalogTypeFilter.Company, companyFilter.Value);
+                filters.Add(CatalogTypeFilter.CompanyId, companyFilter.Value);
             }
 
             if (genreFilter.HasValue)
             {
-                filters.Add(CatalogTypeFilter.Genre, genreFilter.Value);
+                filters.Add(CatalogTypeFilter.GenreId, genreFilter.Value);
             }
 
             var result = await _httpClientService.SendAsync<Catalog, PaginatedItemRequest<CatalogTypeFilter>>(
@@ -56,11 +56,14 @@ namespace MVC.Services.Implementations
                 HttpMethod.Post,
                 null);
 
-            var companiesSelectList = companiesResult.Select(c => new SelectListItem()
+            var allCompaniesItem = new SelectListItem() { Value = "0", Text = "All Companies" };
+
+            var companiesSelectList = new List<SelectListItem>() { allCompaniesItem };
+            companiesSelectList.AddRange(companiesResult.Select(c => new SelectListItem()
             {
                 Value = c.Id.ToString(),
                 Text = c.Company
-            });
+            }));
 
             return companiesSelectList;
         }
@@ -72,11 +75,15 @@ namespace MVC.Services.Implementations
                 HttpMethod.Post,
                 null);
 
-            var genresSelectList = genresResult.Select(g => new SelectListItem()
+            var allGenresItem = new SelectListItem() { Value = "0", Text = "All Genres" };
+
+            var genresSelectList = new List<SelectListItem>() { allGenresItem };
+
+            genresSelectList.AddRange(genresResult.Select(g => new SelectListItem()
             {
                 Value = g.Id.ToString(),
                 Text = g.Genre
-            });
+            }));
 
             return genresSelectList;
         }

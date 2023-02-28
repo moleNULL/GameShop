@@ -1,11 +1,7 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Extensions.ObjectPool;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
-using System.ComponentModel;
-using System.Text;
 
 namespace MVC.Controllers
 {
@@ -19,13 +15,13 @@ namespace MVC.Controllers
         }
 
         public async Task<IActionResult> Index(
-            int? pageIndex, int? itemsPerPage, int? companyFilter, int? genreFilter)
+            int? page, int? itemsPage, int? companyFilter, int? genreFilter)
         {
-            pageIndex ??= 0;
-            itemsPerPage ??= 6;
+            page ??= 0;
+            itemsPage ??= 6;
 
             var catalog = await _catalogService.GetCatalogItems(
-                pageIndex.Value, itemsPerPage.Value, companyFilter, genreFilter);
+                page.Value, itemsPage.Value, companyFilter, genreFilter);
 
             if (catalog is null)
             {
@@ -35,9 +31,9 @@ namespace MVC.Controllers
             var paginationInfo = new PaginationInfo()
             {
                 TotalItems = catalog.Count,
-                ItemsPerPage = itemsPerPage.Value,
-                CurrentPage = pageIndex.Value,
-                TotalPages = (int)Math.Ceiling((decimal)catalog.Count / itemsPerPage.Value)
+                ItemsPerPage = itemsPage.Value,
+                CurrentPage = page.Value,
+                TotalPages = (int)Math.Ceiling((decimal)catalog.Count / itemsPage.Value)
             };
 
             var vm = new IndexViewModel()
@@ -57,7 +53,7 @@ namespace MVC.Controllers
         }
 
         // Test method
-        public async Task<IEnumerable<SelectListItem>> GetCompanies()
+        public async Task<IEnumerable<SelectListItem>> Co()
         {
             var companiesSelectList = await _catalogService.GetCompanies();
 
@@ -65,7 +61,7 @@ namespace MVC.Controllers
         }
 
         // Test method
-        public async Task<IEnumerable<SelectListItem>> GetGenres()
+        public async Task<IEnumerable<SelectListItem>> Ge()
         {
             var companiesSelectList = await _catalogService.GetGenres();
 

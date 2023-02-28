@@ -1,4 +1,5 @@
 ﻿using WebAPI.Models.Dtos;
+using WebAPI.Models.Enums;
 using WebAPI.Models.Responses;
 
 namespace WebAPI.Services.Interfaces
@@ -10,6 +11,7 @@ namespace WebAPI.Services.Interfaces
         Task<List<CatalogItemDto>> GetItemByGenreAsync(string genre);
         Task<List<CatalogCompanyDto>> GetCompaniesAsync();
         Task<List<CatalogGenreDto>> GetGenresAsync();
-        Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(int pageIndex, int pageSize);
+        Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(
+            int pageIndex, int pageSize, Dictionary<CatalogTypeFilter, int?> filters);
     }
 }

@@ -8,6 +8,7 @@ using WebAPI.Repositories.Interfaces;
 using AutoMapper;
 using CatalogWebAPI.Data.Entities;
 using Infrastructure.Exceptions;
+using WebAPI.Models.Enums;
 
 namespace WebAPI.Services.Implementations
 {
@@ -100,7 +101,8 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public async Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(int pageIndex, int pageSize)
+        public async Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(
+            int pageIndex, int pageSize, Dictionary<CatalogTypeFilter, int?> filters)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -109,7 +111,33 @@ namespace WebAPI.Services.Implementations
                     throw new BusinessException("pageIndex or pageSize must not be negative");
                 }
 
-                var result = await _catalogItemRepository.GetItemsByPageAsync(pageIndex, pageSize);
+                int? companyId = null;
+                int? genreId = null;
+
+                if (filters is not null)
+                {
+                    if (filters.TryGetValue(CatalogTypeFilter.CompanyId, out int? company))
+                    {
+                        // 0 - All Companies, so companyId must be null to select all items
+                        if (company != 0)
+                        {
+                            companyId = company;
+                        }
+                    }
+
+                    if (filters.TryGetValue(CatalogTypeFilter.GenreId, out int? genre))
+                    {
+                        // 0 - All Genres, so genreId must be null to select all items
+                        if (genre != 0)
+                        {
+                            genreId = genre;
+                        }
+                    }
+                }
+
+                var result = await _catalogItemRepository.GetItemsByPageAsync(
+                    pageIndex, pageSize, companyId, genreId);
+
                 return new PaginatedItemsResponse<CatalogItemDto>()
                 {
                     Count = result.TotalCount,

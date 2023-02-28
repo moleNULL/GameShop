@@ -1,4 +1,4 @@
-﻿namespace MVC.Models
+﻿namespace WebAPI.Models.Enums
 {
     public enum CatalogTypeFilter
     {

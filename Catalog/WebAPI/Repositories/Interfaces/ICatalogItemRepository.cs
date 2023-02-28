@@ -11,7 +11,8 @@ namespace WebAPI.Repositories.Interfaces
         Task<List<CatalogItemEntity>> GetByGenreAsync(string genre);
         Task<List<CatalogCompanyEntity>> GetCompaniesAsync();
         Task<List<CatalogGenreEntity>> GetGenresAsync();
-        Task<PaginatedItems<CatalogItemEntity>> GetItemsByPageAsync(int pageIndex, int pageSize);
+        Task<PaginatedItems<CatalogItemEntity>> GetItemsByPageAsync(
+            int pageIndex, int pageSize, int? companyId, int? genreId);
 
         Task<int?> AddAsync(string name, decimal price, int year, string pictureFileName, int availablestock, int companyId, int genreId);
         Task<EntityState> RemoveAsync(int id);

@@ -18,7 +18,7 @@ services:
       - 5000:5000
     extra_hosts:
       - "www.alevelwebsite.com:192.168.0.1"
-  web.mvc:
+  website.mvc:
     container_name: lde.website.mvc
     build:
       context: .

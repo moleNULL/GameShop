@@ -2,7 +2,8 @@
 
 namespace WebAPI.Models.Requests
 {
-    public class PaginatedItemsRequest
+    public class PaginatedItemsRequest<T>
+        where T : notnull
     {
         /// <summary>
         /// Gets or sets the pageIndex of the item
@@ -17,5 +18,7 @@ namespace WebAPI.Models.Requests
         /// <example>6</example>
         [Range(minimum: 0, maximum: int.MaxValue)]
         public int PageSize { get; set; }
+
+        public Dictionary<T, int?> Filters { get; set; } = null!;
     }
 }
