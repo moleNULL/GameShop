@@ -35,9 +35,11 @@ namespace MVC.Services.Implementations
 
             await Console.Out.WriteLineAsync(url);
 
-            var httpMessage = new HttpRequestMessage();
-            httpMessage.RequestUri = new Uri(url);
-            httpMessage.Method = httpMethod;
+            var httpMessage = new HttpRequestMessage()
+            {
+                RequestUri = new Uri(url),
+                Method = httpMethod
+            };
 
             if (content is not null)
             {
@@ -55,7 +57,7 @@ namespace MVC.Services.Implementations
                 return response!;
             }
 
-            return default(TResponse) !;
+            return default !;
         }
     }
 }

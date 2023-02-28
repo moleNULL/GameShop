@@ -18,6 +18,26 @@ services:
       - 5000:5000
     extra_hosts:
       - "www.alevelwebsite.com:192.168.0.1"
+  web.mvc:
+    container_name: lde.website.mvc
+    build:
+      context: .
+      dockerfile: Website/MVC/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5001
+      - CatalogURL=http://www.alevelwebsite.com:5000/api/v1/catalogbff
+      - Authorization__Authority=http://www.alevelwebsite.com:5002
+      - IdentityUrl=http://www.alevelwebsite.com:5002
+      - CallbackUrl=http://www.alevelwebsite.com/
+      - RedirectUrl=http://www.alevelwebsite.com/signin-oidc
+    depends_on:
+      - catalog.api
+      - identityserver
+    ports:
+      - 5001:5001
+    extra_hosts:
+      - "www.alevelwebsite.com:192.168.0.1"
   identityserver:
     container_name: lde.identityserver
     build:
@@ -72,4 +92,4 @@ networks:
       driver: default
       config:
         - subnet: 192.168.0.0/24
-        - gateway: 192.168.0.1
+          gateway: 192.168.0.1
