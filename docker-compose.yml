@@ -10,13 +10,15 @@ services:
        - ASPNETCORE_ENVIRONMENT=Development
        - ASPNETCORE_URLS=http://+:5003
        - Authorization__Authority=http://www.alevelwebsite.com:5002
-       - Redis__Host=www.alevelwebsite.com:6380
+       - Redis__Host=www.alevelwebsite.com:6379
        - Redis__CacheTimeout=01:00:00
        - PatBase=http://www.alevelwebsite.com:5003
     depends_on:
        - redis
     ports:
        - 5003:5003
+    extra_hosts:
+       - "www.alevelwebsite.com:192.168.0.1"
   catalog.api:
     container_name: lde.catalog.webapi
     build:
@@ -96,6 +98,13 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5433:5432
+    extra_hosts:
+      - "www.alevelwebsite.com:192.168.0.1"
+  redis:
+    image: redis
+    container_name: lde.redis
+    ports:
+      - 6379:6379
     extra_hosts:
       - "www.alevelwebsite.com:192.168.0.1"
 
