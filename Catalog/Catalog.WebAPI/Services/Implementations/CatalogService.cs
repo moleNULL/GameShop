@@ -6,7 +6,6 @@ using CatalogWebAPI.Data;
 using Infrastructure.Services.Interfaces;
 using WebAPI.Repositories.Interfaces;
 using AutoMapper;
-using CatalogWebAPI.Data.Entities;
 using Infrastructure.Exceptions;
 using WebAPI.Models.Enums;
 

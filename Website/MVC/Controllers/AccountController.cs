@@ -40,8 +40,8 @@ namespace MVC.Controllers
 
             // var homeUrl = Url.Action(nameof(CatalogController));
             var homeUrl = Url.Action(nameof(CatalogController.Index), "Catalog");
-            return new SignOutResult(OpenIdConnectDefaults.AuthenticationScheme,
-                new AuthenticationProperties { RedirectUri = homeUrl });
+            return new SignOutResult(
+                OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = homeUrl });
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace MVC.ViewModels
 {
     public class ApplicationUser : IdentityUser
     {
         public string CardNumber { get; set; } = null!;
-        public string SecurityNumber { get; set;} = null!;
+        public string SecurityNumber { get; set; } = null!;
         public string Expiration { get; set; } = null!;
         public string CardHolderName { get; set; } = null!;
         public int CardType { get; set; }

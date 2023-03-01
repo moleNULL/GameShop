@@ -44,7 +44,7 @@ namespace MVC.Controllers
                 PaginationInfo = paginationInfo
             };
 
-            vm.PaginationInfo.NextPage = 
+            vm.PaginationInfo.NextPage =
                 (vm.PaginationInfo.CurrentPage == vm.PaginationInfo.TotalPages - 1) ? "is-disabled" : "";
             vm.PaginationInfo.PreviousPage =
                 (vm.PaginationInfo.CurrentPage == 0) ? "is-disabled" : "";

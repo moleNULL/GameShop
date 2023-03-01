@@ -1,11 +1,8 @@
-﻿using IdentityModel.Client;
+﻿using System.Text;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.IdentityModel.Tokens;
 using MVC.Services.Interfaces;
-using MVC.ViewModels;
 using Newtonsoft.Json;
-using System.Text;
-using System.Text.Json;
 
 namespace MVC.Services.Implementations
 {

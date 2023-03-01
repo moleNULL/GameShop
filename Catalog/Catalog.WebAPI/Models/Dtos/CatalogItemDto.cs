@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using CatalogWebAPI.Data.Entities;
-
-namespace WebAPI.Models.Dtos
+﻿namespace WebAPI.Models.Dtos
 {
     public class CatalogItemDto
     {

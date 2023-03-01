@@ -1,7 +1,7 @@
-﻿using MVC.Services.Interfaces;
-using MVC.ViewModels;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Security.Principal;
+using MVC.Services.Interfaces;
+using MVC.ViewModels;
 
 namespace MVC.Services.Implementations
 {

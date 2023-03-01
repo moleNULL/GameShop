@@ -4,7 +4,6 @@ using MVC.Configurations;
 using MVC.Models;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
-using System.Net.Http;
 
 namespace MVC.Services.Implementations
 {

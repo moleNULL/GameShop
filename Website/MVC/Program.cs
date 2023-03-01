@@ -52,7 +52,6 @@ namespace MVC
                 options.Scope.Add("mvc");
             });
 
-
             builder.Services.Configure<MvcConfig>(configuration);
 
             builder.Services.AddHttpClient();
@@ -67,6 +66,7 @@ namespace MVC
             {
                 app.UseExceptionHandler("/Error");
             }
+
             app.UseStaticFiles();
 
             app.UseCookiePolicy(new CookiePolicyOptions() { MinimumSameSitePolicy = SameSiteMode.Lax });
