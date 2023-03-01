@@ -1,7 +1,10 @@
-﻿namespace Basket.WebAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Basket.WebAPI.Models
 {
-    public class SetItemRequest
+    public class ItemDto
     {
+        [Required]
         public int ItemId { get; set; }
         public string ItemName { get; set; } = null!;
         public decimal ItemPrice { get; set; }

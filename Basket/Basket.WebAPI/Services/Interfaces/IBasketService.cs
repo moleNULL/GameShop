@@ -4,9 +4,10 @@ namespace Basket.WebAPI.Services.Interfaces
 {
     public interface IBasketService
     {
-        Task SetItemAsync(
-            string? userId, int itemId, string itemName, decimal itemPrice, string itemPictureUrl, int itemQuantity);
+        Task<bool> SetItemsAsync(string? userId, List<ItemDto> items);
 
-        Task<GetItemResponse> GetItemAsync(string? userId);
+        Task<GetItemsResponse> GetItemsAsync(string? userId);
+
+        Task<bool> FlushAllAsync(string? userId);
     }
 }

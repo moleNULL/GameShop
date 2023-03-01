@@ -13,27 +13,37 @@ namespace Basket.WebAPI.Services.Implementations
             _cacheService = cacheService;
         }
 
-        public async Task<GetItemResponse> GetItemAsync(string? userId)
+        public async Task<GetItemsResponse> GetItemsAsync(string? userId)
         {
             if (userId is null)
             {
                 throw new BusinessException("userId is null");
             }
 
-            string result = await _cacheService.GetAsync<string>(userId);
-
-            // incorrect data
-            return new GetItemResponse() { ItemName = result };
+            var result = await _cacheService.GetAsync<List<ItemDto>>(userId);
+            return new GetItemsResponse() { Items = result };
         }
 
-        public async Task SetItemAsync(string? userId, int itemId, string itemName, decimal itemPrice, string itemPictureUrl, int itemQuantity)
+        public async Task<bool> SetItemsAsync(string? userId, List<ItemDto> items)
         {
             if (userId is null)
             {
                 throw new BusinessException("userId is null");
             }
 
-            await _cacheService.SetAsync(userId, itemName);
+            bool isSet = await _cacheService.SetAsync(userId, items);
+            return isSet;
+        }
+
+        public async Task<bool> FlushAllAsync(string? userId)
+        {
+            if (userId is null)
+            {
+                throw new BusinessException("userId is null");
+            }
+
+            bool isFlushed = await _cacheService.FlushAsync(userId);
+            return isFlushed;
         }
     }
 }

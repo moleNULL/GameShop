@@ -11,6 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Services\Implementations\BasketService.cs~RF2f2b283.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="StackExchange.Redis" Version="2.6.96" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>

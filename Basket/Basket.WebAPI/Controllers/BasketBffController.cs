@@ -21,25 +21,33 @@ namespace Basket.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<IActionResult> SetItemAsync(SetItemRequest request)
+        [ProducesResponseType(typeof(SetItemsResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> SetItemsToBasketAsync(SetItemsRequest request)
         {
             string? basketId = User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
+            bool isSet = await _basketService.SetItemsAsync(basketId, request.Items.ToList());
 
-            await _basketService.SetItemAsync(basketId, request.ItemId, request.ItemName, request.ItemPrice, request.ItemPictureUrl, request.ItemQuantity);
-
-            // fill it with data
-            return Ok();
+            return Ok(new SetItemsResponse { IsSet = isSet });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(GetItemResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetItemAsync()
+        [ProducesResponseType(typeof(GetItemsResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetItemsFromBasketAsync()
         {
             string? basketId = User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
-            GetItemResponse? response = await _basketService.GetItemAsync(basketId);
+            GetItemsResponse? response = await _basketService.GetItemsAsync(basketId);
 
             return Ok(response);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(FlushAllResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> FlushAllAsync()
+        {
+            string? basketId = User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
+            bool isFlushed = await _basketService.FlushAllAsync(basketId);
+
+            return Ok(new FlushAllResponse { IsFlushed = isFlushed });
         }
     }
 }

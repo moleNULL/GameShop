@@ -22,7 +22,7 @@ namespace Basket.WebAPI.Services.Implementations
             _basketRedisConfig = basketRedisConfig.Value;
         }
 
-        public async Task SetAsync<T>(string key, T value, IDatabase redisDb = null!, TimeSpan? expiry = null)
+        public async Task<bool> SetAsync<T>(string key, T value, IDatabase redisDb = null!, TimeSpan? expiry = null)
         {
             redisDb ??= GetRedisDatabase();
             expiry ??= _basketRedisConfig.CacheTimeout;
@@ -30,9 +30,9 @@ namespace Basket.WebAPI.Services.Implementations
             string cacheKey = GetItemCacheKey(key);
             RedisValue serialized = JsonSerializer.Serialize(value);
 
-            bool isAdded = await redisDb.StringSetAsync(cacheKey, serialized, expiry);
+            bool isSet = await redisDb.StringSetAsync(cacheKey, serialized, expiry);
 
-            if (isAdded)
+            if (isSet)
             {
                 _logger.LogInformation($"Cached value for {key} was added to cache");
             }
@@ -40,6 +40,8 @@ namespace Basket.WebAPI.Services.Implementations
             {
                 _logger.LogInformation($"Failed to set the cached value for {key}");
             }
+
+            return isSet;
         }
 
         public async Task<T> GetAsync<T>(string key)
@@ -49,6 +51,15 @@ namespace Basket.WebAPI.Services.Implementations
             RedisValue serialized = await redisDb.StringGetAsync(cacheKey);
 
             return serialized.HasValue ? JsonSerializer.Deserialize<T>(serialized.ToString()) ! : default !;
+        }
+
+        public async Task<bool> FlushAsync(string key)
+        {
+            var redisDb = GetRedisDatabase();
+            string cacheKey = GetItemCacheKey(key);
+
+            bool isFlushed = await redisDb.KeyDeleteAsync(key);
+            return isFlushed;
         }
 
         private IDatabase GetRedisDatabase()
