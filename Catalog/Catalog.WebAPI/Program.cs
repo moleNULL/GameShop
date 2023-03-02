@@ -89,7 +89,12 @@ namespace CatalogWebAPI
             var app = builder.Build();
 
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(setup =>
+            {
+                setup.SwaggerEndpoint($"{configuration["PathBase"]}/swagger/v1/swagger.json", "Catalog.API V1");
+                setup.OAuthClientId("catalogswaggerui");
+                setup.OAuthAppName("Catalog Swagger UI");
+            });
 
             app.UseRouting();
 
