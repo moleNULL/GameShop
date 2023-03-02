@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC.Models.BasketModels;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
+using Newtonsoft.Json;
 
 namespace MVC.Controllers
 {
@@ -20,7 +24,7 @@ namespace MVC.Controllers
             page ??= 0;
             itemsPage ??= 6;
 
-            var catalog = await _catalogService.GetCatalogItems(
+            var catalog = await _catalogService.GetCatalogItemsAsync(
                 page.Value, itemsPage.Value, companyFilter, genreFilter);
 
             if (catalog is null)
@@ -39,8 +43,8 @@ namespace MVC.Controllers
             var vm = new IndexViewModel()
             {
                 CatalogItems = catalog.ItemList,
-                Companies = await _catalogService.GetCompanies(),
-                Genres = await _catalogService.GetGenres(),
+                Companies = await _catalogService.GetCompaniesAsync(),
+                Genres = await _catalogService.GetGenresAsync(),
                 PaginationInfo = paginationInfo
             };
 
@@ -52,10 +56,50 @@ namespace MVC.Controllers
             return View(vm);
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> BasketAddAsync()
+        {
+            var catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+
+            return View(catalogItems);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> BasketAddAsync(List<string> items)
+        {
+            var basketItems = new List<BasketItemDto>();
+            foreach (var itemJson in items)
+            {
+                var item = JsonConvert.DeserializeObject<BasketItemDto>(itemJson);
+
+                if (item is not null)
+                {
+                    basketItems.Add(item);
+                }
+            }
+
+            bool isAdded = await _catalogService.AddItemsToBasketAsync(basketItems);
+            ViewData["isAdded"] = isAdded;
+
+            var catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+
+            return View(catalogItems);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> BasketShowAsync()
+        {
+            var basketItems = await _catalogService.GetItemsFromBasketAsync();
+
+            return View(basketItems);
+        }
+
         // Test method
         public async Task<IEnumerable<SelectListItem>> Co()
         {
-            var companiesSelectList = await _catalogService.GetCompanies();
+            var companiesSelectList = await _catalogService.GetCompaniesAsync();
 
             return companiesSelectList!;
         }
@@ -63,7 +107,7 @@ namespace MVC.Controllers
         // Test method
         public async Task<IEnumerable<SelectListItem>> Ge()
         {
-            var companiesSelectList = await _catalogService.GetGenres();
+            var companiesSelectList = await _catalogService.GetGenresAsync();
 
             return companiesSelectList!;
         }

@@ -54,7 +54,7 @@ namespace MVC.Services.Implementations
                 return response!;
             }
 
-            return default !;
+            throw new Exception(await result.Content.ReadAsStringAsync());
         }
     }
 }

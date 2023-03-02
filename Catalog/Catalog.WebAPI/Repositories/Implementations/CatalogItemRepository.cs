@@ -1,12 +1,9 @@
-﻿using System.Net.WebSockets;
-using CatalogWebAPI.Data;
+﻿using CatalogWebAPI.Data;
 using CatalogWebAPI.Data.Entities;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using WebAPI.Data;
 using WebAPI.Repositories.Interfaces;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace WebAPI.Repositories.Implementations
 {
@@ -29,7 +26,7 @@ namespace WebAPI.Repositories.Implementations
             return item ?? new CatalogItemEntity();
         }
 
-        public async Task<List<CatalogItemEntity>> GetByCompanyAsync(string company)
+        public async Task<IEnumerable<CatalogItemEntity>> GetByCompanyAsync(string company)
         {
             var items = await _dbContext.CatalogItems
                 .Include(ci => ci.CatalogCompany)
@@ -40,7 +37,7 @@ namespace WebAPI.Repositories.Implementations
             return items ?? new List<CatalogItemEntity>();
         }
 
-        public async Task<List<CatalogItemEntity>> GetByGenreAsync(string genre)
+        public async Task<IEnumerable<CatalogItemEntity>> GetByGenreAsync(string genre)
         {
             var items = await _dbContext.CatalogItems
                 .Include(ci => ci.CatalogCompany)
@@ -51,13 +48,13 @@ namespace WebAPI.Repositories.Implementations
             return items ?? new List<CatalogItemEntity>();
         }
 
-        public async Task<List<CatalogCompanyEntity>> GetCompaniesAsync()
+        public async Task<IEnumerable<CatalogCompanyEntity>> GetCompaniesAsync()
         {
             var companies = await _dbContext.CatalogCompanies.ToListAsync();
             return companies ?? new List<CatalogCompanyEntity>();
         }
 
-        public async Task<List<CatalogGenreEntity>> GetGenresAsync()
+        public async Task<IEnumerable<CatalogGenreEntity>> GetGenresAsync()
         {
             var genres = await _dbContext.CatalogGenres.ToListAsync();
             return genres ?? new List<CatalogGenreEntity>();
@@ -88,6 +85,16 @@ namespace WebAPI.Repositories.Implementations
                 .ToListAsync();
 
             return new PaginatedItems<CatalogItemEntity>() { TotalCount = totalCount, ItemList = itemList };
+        }
+
+        public async Task<IEnumerable<CatalogItemEntity>> GetAllCatalogItemsAsync()
+        {
+            var allItemList = await _dbContext.CatalogItems
+                .Include(i => i.CatalogCompany)
+                .Include(i => i.CatalogGenre)
+                .ToListAsync();
+
+            return allItemList;
         }
 
         public async Task<int?> AddAsync(string name, decimal price, int year, string pictureFileName, int availablestock, int companyId, int genreId)

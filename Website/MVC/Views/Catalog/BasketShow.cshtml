@@ -1,0 +1,48 @@
+﻿@model IEnumerable<BasketItemDto>
+
+@{
+    ViewData["Title"] = "BasketShow";
+    int count = 0;
+}
+
+       <div style="display: flex; justify-content: flex-end; align-items: center; margin-right: 10px;">
+            <a asp-controller="Catalog" asp-action="BasketAdd">
+                <p style="color: deepskyblue; font-size: 25px; text-decoration: underline; text-align: right; margin: 0;">
+                    Return to [Add To Basket]
+                </p>
+            </a>
+        </div>
+
+<table class="table">
+        <thead>
+            <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Picture</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <strong>@(++count)</strong>
+                    </td>
+                    <td>
+                        <strong>@item.ItemName</strong>
+                    </td>
+                    <td>
+                        @item.ItemPrice.ToString("c", CultureInfo.GetCultureInfo("en-US"))
+                    </td>
+                    <td>
+                        @item.ItemQuantity
+                    </td>
+                    <td>
+                        <img src="@item.ItemPictureUrl" alt="@item.ItemName" width="50" height="50" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+</table>

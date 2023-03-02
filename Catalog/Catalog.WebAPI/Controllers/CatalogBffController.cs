@@ -9,12 +9,12 @@ using WebAPI.Models.Requests;
 using WebAPI.Models.Responses;
 using WebAPI.Services.Interfaces;
 
-namespace WebAPI.Controllers.BackendForFrontend
+namespace Catalog.WebAPI.Controllers
 {
     [ApiController]
     [AllowAnonymous]
     [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
-    [Route(ComponentDefaults.DefaultRoute)] // Route("api/v1/[controller]/[action]")
+    [Route(ComponentDefaults.CatalogDefaultRoute)] // Route("api/v1/[controller]/[action]")
     public class CatalogBffController : ControllerBase
     {
         private readonly ICatalogService _catalogService;
@@ -30,6 +30,15 @@ namespace WebAPI.Controllers.BackendForFrontend
         {
             var result = await _catalogService.GetCatalogItemsAsync(
                 request.PageIndex, request.PageSize, request.Filters);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(IEnumerable<CatalogItemDto>), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> GetAllCatalogItemsAsync()
+        {
+            var result = await _catalogService.GetAllCatalogItemsAsync();
 
             return Ok(result);
         }

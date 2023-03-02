@@ -10,7 +10,7 @@ namespace Basket.WebAPI.Controllers
 {
     [ApiController]
     [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
-    [Route(ComponentDefaults.DefaultRoute)]
+    [Route(ComponentDefaults.BasketDefaultRoute)]
     public class BasketBffController : ControllerBase
     {
         private readonly IBasketService _basketService;

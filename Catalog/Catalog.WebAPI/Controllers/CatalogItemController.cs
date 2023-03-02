@@ -11,7 +11,7 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Authorize(Policy = AuthPolicy.AllowClientPolicy)]
-    [Route(ComponentDefaults.DefaultRoute)]
+    [Route(ComponentDefaults.CatalogDefaultRoute)]
     public class CatalogItemController : ControllerBase
     {
         private readonly ICatalogItemService _catalogItemService;

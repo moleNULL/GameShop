@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using MVC.Configurations;
 using MVC.Models;
+using MVC.Models.BasketModels;
+using MVC.Models.CatalogDtos;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
 
@@ -21,7 +24,7 @@ namespace MVC.Services.Implementations
             _settings = settings;
         }
 
-        public async Task<Catalog> GetCatalogItems(int page, int itemsPerPage, int? companyFilter, int? genreFilter)
+        public async Task<Catalog> GetCatalogItemsAsync(int page, int itemsPerPage, int? companyFilter, int? genreFilter)
         {
             var filters = new Dictionary<CatalogTypeFilter, int?>();
 
@@ -48,7 +51,7 @@ namespace MVC.Services.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetCompanies()
+        public async Task<IEnumerable<SelectListItem>> GetCompaniesAsync()
         {
             var companiesResult = await _httpClientService.SendAsync<List<CatalogCompany>, object>(
                 $"{_settings.Value.CatalogUrl}/getcompanies",
@@ -67,7 +70,7 @@ namespace MVC.Services.Implementations
             return companiesSelectList;
         }
 
-        public async Task<IEnumerable<SelectListItem>> GetGenres()
+        public async Task<IEnumerable<SelectListItem>> GetGenresAsync()
         {
             var genresResult = await _httpClientService.SendAsync<List<CatalogGenre>, object>(
                 $"{_settings.Value.CatalogUrl}/getgenres",
@@ -85,6 +88,46 @@ namespace MVC.Services.Implementations
             }));
 
             return genresSelectList;
+        }
+
+        public async Task<IEnumerable<CatalogItemDto>> GetAllCatalogItemsAsync()
+        {
+            var allItemsResult = await _httpClientService.SendAsync<IEnumerable<CatalogItemDto>, object>(
+                $"{_settings.Value.CatalogUrl}/getallcatalogitems",
+                HttpMethod.Post,
+                null);
+
+            return allItemsResult;
+        }
+
+        public async Task<bool> AddItemsToBasketAsync(IEnumerable<BasketItemDto> items)
+        {
+            string url = $"{_settings.Value.BasketUrl}/setitemstobasket";
+            var result = await _httpClientService.SendAsync<AddItemsToBasketResponse, AddItemsToBasketRequest>(
+                url, HttpMethod.Post, new AddItemsToBasketRequest { Items = items });
+
+            if (result is null)
+            {
+                throw new BusinessException(
+                    $"Error! Unable to set data to Basket.WebAPI. Request URL: {url}");
+            }
+
+            return result.IsSet;
+        }
+
+        public async Task<IEnumerable<BasketItemDto>> GetItemsFromBasketAsync()
+        {
+            string url = $"{_settings.Value.BasketUrl}/getitemsfrombasket";
+            var result = await _httpClientService.SendAsync<GetItemsFromBasketResponse, object>(
+                url, HttpMethod.Post, null);
+
+            if (result is null)
+            {
+                throw new BusinessException(
+                    $"Error! Unable to set data to Basket.WebAPI. Request URL: {url}");
+            }
+
+            return result.Items;
         }
     }
 }

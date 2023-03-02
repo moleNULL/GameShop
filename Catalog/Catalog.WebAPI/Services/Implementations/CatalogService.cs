@@ -46,7 +46,7 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public async Task<List<CatalogItemDto>> GetItemByCompanyAsync(string company)
+        public async Task<IEnumerable<CatalogItemDto>> GetItemByCompanyAsync(string company)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -62,7 +62,7 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public async Task<List<CatalogItemDto>> GetItemByGenreAsync(string genre)
+        public async Task<IEnumerable<CatalogItemDto>> GetItemByGenreAsync(string genre)
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -78,7 +78,7 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public async Task<List<CatalogCompanyDto>> GetCompaniesAsync()
+        public async Task<IEnumerable<CatalogCompanyDto>> GetCompaniesAsync()
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -89,7 +89,7 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public async Task<List<CatalogGenreDto>> GetGenresAsync()
+        public async Task<IEnumerable<CatalogGenreDto>> GetGenresAsync()
         {
             return await ExecuteSafeAsync(async () =>
             {
@@ -144,6 +144,17 @@ namespace WebAPI.Services.Implementations
                     PageIndex = pageIndex,
                     PageSize = pageSize
                 };
+            });
+        }
+
+        public async Task<IEnumerable<CatalogItemDto>> GetAllCatalogItemsAsync()
+        {
+            return await ExecuteSafeAsync(async () =>
+            {
+                var resultEntities = await _catalogItemRepository.GetAllCatalogItemsAsync();
+                var resultDto = _mapper.Map<IEnumerable<CatalogItemDto>>(resultEntities);
+
+                return resultDto;
             });
         }
     }
