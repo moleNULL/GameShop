@@ -5,10 +5,10 @@
     int count = 0;
 }
 
-       <div style="display: flex; justify-content: flex-end; align-items: center; margin-right: 10px;">
-            <a asp-controller="Catalog" asp-action="BasketAdd">
-                <p style="color: deepskyblue; font-size: 25px; text-decoration: underline; text-align: right; margin: 0;">
-                    Return to [Add To Basket]
+       <div style="display: flex; justify-content: flex-end; align-items: center; margin-right: 10px;">        
+           <a asp-controller="Catalog" asp-action="BasketAdd">
+                <p style="color: deepskyblue; font-size: 25px; text-align: right; margin: 0;">
+                    Add To Basket
                 </p>
             </a>
         </div>
@@ -17,10 +17,10 @@
         <thead>
             <tr>
                 <th scope="col">No.</th>
+                <th scope="col">Cover</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Quantity</th>
-                <th scope="col">Picture</th>
             </tr>
         </thead>
         <tbody>
@@ -31,6 +31,9 @@
                         <strong>@(++count)</strong>
                     </td>
                     <td>
+                        <img src="@item.ItemPictureUrl" alt="@item.ItemName" width="50" height="50" />
+                    </td>
+                    <td>
                         <strong>@item.ItemName</strong>
                     </td>
                     <td>
@@ -39,10 +42,24 @@
                     <td>
                         @item.ItemQuantity
                     </td>
-                    <td>
-                        <img src="@item.ItemPictureUrl" alt="@item.ItemName" width="50" height="50" />
-                    </td>
                 </tr>
             }
         </tbody>
 </table>
+
+@if(Model.Count() > 0)
+{
+    <form asp-controller="Catalog" asp-action="BasketEmpty" method="post">
+    <input type="hidden" name="emptyBasket" value="true" />
+    <button type="submit" style="background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;">Empty Basket</button>
+    </form>    
+} 

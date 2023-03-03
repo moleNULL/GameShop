@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MVC.Models.BasketModels;
+using MVC.Models.CatalogDtos;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
 using Newtonsoft.Json;
@@ -60,7 +61,7 @@ namespace MVC.Controllers
         [Authorize]
         public async Task<IActionResult> BasketAddAsync()
         {
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
 
             return View(catalogItems);
         }
@@ -70,6 +71,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> BasketAddAsync(List<string> items)
         {
             var basketItems = new List<BasketItemDto>();
+
             foreach (var itemJson in items)
             {
                 var item = JsonConvert.DeserializeObject<BasketItemDto>(itemJson);
@@ -80,10 +82,17 @@ namespace MVC.Controllers
                 }
             }
 
-            bool isAdded = await _catalogService.AddItemsToBasketAsync(basketItems);
-            ViewData["isAdded"] = isAdded;
+            if (basketItems.Count == 0)
+            {
+                ViewData["isAdded"] = false;
+            }
+            else
+            {
+                bool isAdded = await _catalogService.AddItemsToBasketAsync(basketItems);
+                ViewData["isAdded"] = isAdded;
+            }
 
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
 
             return View(catalogItems);
         }
@@ -91,9 +100,17 @@ namespace MVC.Controllers
         [Authorize]
         public async Task<IActionResult> BasketShowAsync()
         {
-            var basketItems = await _catalogService.GetItemsFromBasketAsync();
+            var basketItems = await _catalogService.GetItemsFromBasketAsync() ?? new List<BasketItemDto>();
 
             return View(basketItems);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> BasketEmptyAsync()
+        {
+            bool isFlushed = await _catalogService.EmptyBasketAsync();
+
+            return RedirectToAction("BasketShow", "Catalog");
         }
 
         // Test method

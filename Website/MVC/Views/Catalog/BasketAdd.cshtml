@@ -12,7 +12,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-right: 10px;">
                 <p style="color: green; font-size: 25px; margin: 0 auto;">Added</p>
                 <a asp-controller="Catalog" asp-action="BasketShow">
-                    <p style="color: deepskyblue; font-size: 25px; text-decoration: underline; text-align: right; margin: 0;">
+                    <p style="color: deepskyblue; font-size: 25px; text-align: right; margin: 0;">
                         Show Basket
                     </p>
                 </a>
@@ -29,7 +29,7 @@
     {
         <div style="display: flex; justify-content: flex-end; align-items: center; margin-right: 10px;">
             <a asp-controller="Catalog" asp-action="BasketShow">
-                <p style="color: deepskyblue; font-size: 25px; text-decoration: underline; text-align: right; margin: 0;">
+                <p style="color: deepskyblue; font-size: 25px; text-align: right; margin: 0;">
                     Show Basket
                 </p>
             </a>
@@ -41,11 +41,11 @@
             <tr>
                 <th scope="col"><input type="checkbox" checked="true"/></th>
                 <th scope="col">Id</th>
+                <th scope="col">Cover</th>
                 <th scope="col">Name</th>
                 <th scope="col">Price</th>
                 <th scope="col">Year</th>
                 <th scope="col">Available Stock</th>
-                <th scope="col">Picture</th>
             </tr>
         </thead>
         <tbody>
@@ -59,6 +59,9 @@
                         <strong>@item.Id</strong>
                     </td>
                     <td>
+                        <img src="@item.PictureUrl" alt="@item.Name" width="50" height="50" />
+                    </td>
+                    <td>
                         <strong>@item.Name</strong>
                     </td>
                     <td>
@@ -69,9 +72,6 @@
                     </td>
                     <td>
                         @item.AvailableStock
-                    </td>
-                    <td>
-                        <img src="@item.PictureUrl" alt="@item.Name" width="50" height="50" />
                     </td>
                 </tr>
             }

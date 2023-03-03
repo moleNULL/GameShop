@@ -124,10 +124,25 @@ namespace MVC.Services.Implementations
             if (result is null)
             {
                 throw new BusinessException(
-                    $"Error! Unable to set data to Basket.WebAPI. Request URL: {url}");
+                    $"Error! Unable to get data from Basket.WebAPI. Request URL: {url}");
             }
 
             return result.Items;
+        }
+
+        public async Task<bool> EmptyBasketAsync()
+        {
+            string url = $"{_settings.Value.BasketUrl}/flushall";
+            var result = await _httpClientService.SendAsync<EmptyBasketResponse, object>(
+                url, HttpMethod.Post, null);
+
+            if (result is null)
+            {
+                throw new BusinessException(
+                    $"Error! Unable to get data about emptying from Basket.WebAPI. Request URL: {url}");
+            }
+
+            return result.IsFlushed;
         }
     }
 }

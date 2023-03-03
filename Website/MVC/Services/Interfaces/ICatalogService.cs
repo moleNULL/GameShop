@@ -13,5 +13,6 @@ namespace MVC.Services.Interfaces
         Task<IEnumerable<CatalogItemDto>> GetAllCatalogItemsAsync();
         Task<bool> AddItemsToBasketAsync(IEnumerable<BasketItemDto> items);
         Task<IEnumerable<BasketItemDto>> GetItemsFromBasketAsync();
+        Task<bool> EmptyBasketAsync();
     }
 }
