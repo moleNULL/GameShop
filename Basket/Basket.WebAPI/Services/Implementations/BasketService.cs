@@ -17,7 +17,7 @@ namespace Basket.WebAPI.Services.Implementations
         {
             if (userId is null)
             {
-                throw new BusinessException("userId is null");
+                throw new BusinessException("Cannot get items because userId is null");
             }
 
             var result = await _cacheService.GetAsync<List<ItemDto>>(userId);
@@ -28,7 +28,7 @@ namespace Basket.WebAPI.Services.Implementations
         {
             if (userId is null)
             {
-                throw new BusinessException("userId is null");
+                throw new BusinessException("Cannot set items because userId is null");
             }
 
             bool isSet = await _cacheService.SetAsync(userId, items);
@@ -39,7 +39,7 @@ namespace Basket.WebAPI.Services.Implementations
         {
             if (userId is null)
             {
-                throw new BusinessException("userId is null");
+                throw new BusinessException("Cannot delete data because userId is null");
             }
 
             bool isFlushed = await _cacheService.FlushAsync(userId);

@@ -28,7 +28,7 @@ namespace Basket.WebAPI.Services.Implementations
             expiry ??= _basketRedisConfig.CacheTimeout;
 
             string cacheKey = GetItemCacheKey(key);
-            RedisValue serialized = JsonSerializer.Serialize(value);
+            var serialized = JsonSerializer.Serialize(value);
 
             bool isSet = await redisDb.StringSetAsync(cacheKey, serialized, expiry);
 
@@ -58,7 +58,7 @@ namespace Basket.WebAPI.Services.Implementations
             var redisDb = GetRedisDatabase();
             string cacheKey = GetItemCacheKey(key);
 
-            bool isFlushed = await redisDb.KeyDeleteAsync(key);
+            bool isFlushed = await redisDb.KeyDeleteAsync(cacheKey);
             return isFlushed;
         }
 
