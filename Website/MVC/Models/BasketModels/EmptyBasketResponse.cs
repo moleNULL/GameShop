@@ -2,6 +2,6 @@
 {
     public class EmptyBasketResponse
     {
-        public bool IsFlushed { get; init; }
+        public bool IsDeleted { get; init; }
     }
 }

@@ -108,25 +108,9 @@ namespace MVC.Controllers
         [Authorize]
         public async Task<IActionResult> BasketEmptyAsync()
         {
-            bool isFlushed = await _catalogService.EmptyBasketAsync();
+            await _catalogService.EmptyBasketAsync();
 
             return RedirectToAction("BasketShow", "Catalog");
-        }
-
-        // Test method
-        public async Task<IEnumerable<SelectListItem>> Co()
-        {
-            var companiesSelectList = await _catalogService.GetCompaniesAsync();
-
-            return companiesSelectList!;
-        }
-
-        // Test method
-        public async Task<IEnumerable<SelectListItem>> Ge()
-        {
-            var companiesSelectList = await _catalogService.GetGenresAsync();
-
-            return companiesSelectList!;
         }
     }
 }

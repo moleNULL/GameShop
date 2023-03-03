@@ -35,15 +35,15 @@ namespace Basket.WebAPI.Services.Implementations
             return isSet;
         }
 
-        public async Task<bool> FlushAllAsync(string? userId)
+        public async Task<bool> DeleteItemsAsync(string? userId)
         {
             if (userId is null)
             {
                 throw new BusinessException("Cannot delete data because userId is null");
             }
 
-            bool isFlushed = await _cacheService.FlushAsync(userId);
-            return isFlushed;
+            bool isDeleted = await _cacheService.DeleteItemsAsync(userId);
+            return isDeleted;
         }
     }
 }

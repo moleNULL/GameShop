@@ -8,6 +8,6 @@ namespace Basket.WebAPI.Services.Interfaces
 
         Task<GetItemsResponse> GetItemsAsync(string? userId);
 
-        Task<bool> FlushAllAsync(string? userId);
+        Task<bool> DeleteItemsAsync(string? userId);
     }
 }

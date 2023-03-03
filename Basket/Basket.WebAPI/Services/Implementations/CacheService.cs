@@ -53,13 +53,13 @@ namespace Basket.WebAPI.Services.Implementations
             return serialized.HasValue ? JsonSerializer.Deserialize<T>(serialized.ToString()) ! : default !;
         }
 
-        public async Task<bool> FlushAsync(string key)
+        public async Task<bool> DeleteItemsAsync(string key)
         {
             var redisDb = GetRedisDatabase();
             string cacheKey = GetItemCacheKey(key);
 
-            bool isFlushed = await redisDb.KeyDeleteAsync(cacheKey);
-            return isFlushed;
+            bool isDeleted = await redisDb.KeyDeleteAsync(cacheKey);
+            return isDeleted;
         }
 
         private IDatabase GetRedisDatabase()

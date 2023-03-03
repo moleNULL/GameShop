@@ -132,7 +132,7 @@ namespace MVC.Services.Implementations
 
         public async Task<bool> EmptyBasketAsync()
         {
-            string url = $"{_settings.Value.BasketUrl}/flushall";
+            string url = $"{_settings.Value.BasketUrl}/deleteitems";
             var result = await _httpClientService.SendAsync<EmptyBasketResponse, object>(
                 url, HttpMethod.Post, null);
 
@@ -142,7 +142,13 @@ namespace MVC.Services.Implementations
                     $"Error! Unable to get data about emptying from Basket.WebAPI. Request URL: {url}");
             }
 
-            return result.IsFlushed;
+            var items = await GetItemsFromBasketAsync();
+            if (items is not null && result.IsDeleted == false)
+            {
+                throw new BusinessException($"Error! Failed to delete items from Basket.WebAPI");
+            }
+
+            return result.IsDeleted;
         }
     }
 }

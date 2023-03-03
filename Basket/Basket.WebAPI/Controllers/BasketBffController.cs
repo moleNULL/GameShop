@@ -41,13 +41,13 @@ namespace Basket.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(FlushAllResponse), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> FlushAllAsync()
+        [ProducesResponseType(typeof(DeleteItemsResponse), (int)HttpStatusCode.OK)]
+        public async Task<IActionResult> DeleteItemsAsync()
         {
             string? basketId = User.Claims.FirstOrDefault(claim => claim.Type == "sub")?.Value;
-            bool isFlushed = await _basketService.FlushAllAsync(basketId);
+            bool isDeleted = await _basketService.DeleteItemsAsync(basketId);
 
-            return Ok(new FlushAllResponse { IsFlushed = isFlushed });
+            return Ok(new DeleteItemsResponse { IsDeleted = isDeleted });
         }
     }
 }
