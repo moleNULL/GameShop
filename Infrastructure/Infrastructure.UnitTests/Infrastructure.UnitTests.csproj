@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -6,12 +6,16 @@
     <Nullable>enable</Nullable>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	<CodeAnalysisRuleSet>../../settings.ruleset</CodeAnalysisRuleSet>
-	<NoWarn>SA0001;SA1633;SA1200;1591;SA1629;SA1609;ASP0014;CA2254</NoWarn>
+    <NoWarn>SA0001;SA1633;SA1200;1591;SA1629;SA1609;ASP0014;IDE0063;</NoWarn>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="6.10.0" />
+    <None Remove="Services\y3kwhfxh.yoc~" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Moq" Version="4.18.4" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
@@ -30,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Basket.WebAPI\Basket.WebAPI.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

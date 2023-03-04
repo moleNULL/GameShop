@@ -3,8 +3,6 @@ using Basket.WebAPI.Models;
 using Basket.WebAPI.Services.Implementations;
 using Basket.WebAPI.Services.Interfaces;
 using Infrastructure.Exceptions;
-using Moq;
-using System.Collections.Generic;
 
 namespace Basket.UnitTests.Services
 {
@@ -49,7 +47,8 @@ namespace Basket.UnitTests.Services
             string? userId = "123";
             var expectedServiceResult = new List<ItemDto>();
 
-            _cacheService.Setup(x => x.GetAsync<List<ItemDto>>(userId)).ReturnsAsync(expectedServiceResult);
+            _cacheService.Setup(x => x.GetAsync<List<ItemDto>>(It.Is<string>(i => i == userId)))
+                .ReturnsAsync(expectedServiceResult);
 
             // act
             var actualResult = await _basketService.GetItemsAsync(userId);
@@ -62,10 +61,12 @@ namespace Basket.UnitTests.Services
         public async Task GetItemsAsync_Failed()
         {
             // arrange
-            string? userId = "123";
+            string? userId = "-123";
+            List<ItemDto> items = null!;
             GetItemsResponse expectedResult = new GetItemsResponse { Items = null! };
 
-            _cacheService.Setup(x => x.GetAsync<List<ItemDto>>(userId)).ReturnsAsync((List<ItemDto>)null!);
+            _cacheService.Setup(x => x.GetAsync<List<ItemDto>>(It.Is<string>(i => i == userId)))
+                .ReturnsAsync(items);
 
             // act
             var actualResult = await _basketService.GetItemsAsync(userId);
@@ -96,8 +97,12 @@ namespace Basket.UnitTests.Services
             string? userId = "123";
             var items = new List<ItemDto>() { new ItemDto { ItemId = 6, ItemName = "Europa III Universalis" } };
 
-            _cacheService.Setup(x => x.SetAsync(userId, items, It.IsAny<IDatabase>(), It.IsAny<TimeSpan?>()))
-                .ReturnsAsync(true);
+            _cacheService.Setup(x => x.SetAsync(
+                It.Is<string>(i => i == userId),
+                It.Is<List<ItemDto>>(i => i == items),
+                It.IsAny<IDatabase>(),
+                It.IsAny<TimeSpan?>()))
+            .ReturnsAsync(true);
 
             // act
             bool actualResult = await _basketService.SetItemsAsync(userId, items);
@@ -110,12 +115,18 @@ namespace Basket.UnitTests.Services
         public async Task SetItemsAsync_Failed()
         {
             // arrange
+            string? userId = "-123";
+            List<ItemDto> items = null!;
+
             _cacheService.Setup(x => x.SetAsync(
-                It.IsAny<string>(), It.IsAny<List<ItemDto>>(), It.IsAny<IDatabase>(), It.IsAny<TimeSpan?>()))
+                It.Is<string>(i => i == userId),
+                It.Is<List<ItemDto>>(i => i == items),
+                It.IsAny<IDatabase>(),
+                It.IsAny<TimeSpan?>()))
             .ReturnsAsync(false);
 
             // act
-            bool actualResult = await _basketService.SetItemsAsync(string.Empty, null!);
+            bool actualResult = await _basketService.SetItemsAsync(userId, items);
 
             // assert
             actualResult.Should().BeFalse();
@@ -135,6 +146,50 @@ namespace Basket.UnitTests.Services
             await act.Should()
                 .ThrowAsync<BusinessException>()
                 .WithMessage("Cannot set items because userId is null");
+        }
+
+        [Fact]
+        public async Task DeleteItemsAsync_Success()
+        {
+            // arrange
+            string? userId = "123";
+
+            _cacheService.Setup(x => x.DeleteItemsAsync(It.Is<string>(i => i == userId))).ReturnsAsync(true);
+
+            // act
+            bool actualResult = await _basketService.DeleteItemsAsync(userId);
+
+            // arrange
+            actualResult.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task DeleteItemsAsync_Failed()
+        {
+            // arrange
+            string? userId = "-123";
+            _cacheService.Setup(x => x.DeleteItemsAsync(It.Is<string>(i => i == userId))).ReturnsAsync(false);
+
+            // act
+            bool actualResult = await _basketService.DeleteItemsAsync(userId);
+
+            // arrange
+            actualResult.Should().BeFalse();
+        }
+
+        [Fact]
+        public async Task DeletedItemsAsync_ThrowsException()
+        {
+            // arrange
+            string? userId = null;
+
+            // act
+            var act = async () => await _basketService.DeleteItemsAsync(userId);
+
+            // arrange
+            await act.Should()
+                .ThrowAsync<BusinessException>()
+                .WithMessage("Cannot delete data because userId is null");
         }
     }
 }

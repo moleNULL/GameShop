@@ -6,7 +6,8 @@
     <Nullable>enable</Nullable>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 	<CodeAnalysisRuleSet>../../settings.ruleset</CodeAnalysisRuleSet>
-	<NoWarn>SA0001;SA1633;SA1200;1591;SA1629;SA1609;ASP0014;CA2254</NoWarn>
+	<NoWarn>SA0001;SA1633;SA1200;1591;SA1629;SA1609;ASP0014;IDE0063</NoWarn>
+	<GenerateDocumentationFile>True</GenerateDocumentationFile>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -30,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Basket.WebAPI\Basket.WebAPI.csproj" />
+    <ProjectReference Include="..\Catalog.WebAPI\Catalog.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>

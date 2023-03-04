@@ -42,7 +42,7 @@ namespace WebAPI.Services.Implementations
         {
             if (id < 1)
             {
-                throw new BusinessException($"Id must not be negative. Provided id: {id}");
+                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
             }
 
             return ExecuteSafeAsync(async () =>
@@ -56,13 +56,13 @@ namespace WebAPI.Services.Implementations
 
         public Task<bool> UpdateAsync(int id, string name, decimal price, int year, string pictureFileName, int availableStock, int companyId, int genreId)
         {
+            if (id < 1)
+            {
+                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
+            }
+
             return ExecuteSafeAsync(async () =>
             {
-                if (id < 1)
-                {
-                    throw new BusinessException($"Id must not be negative. Provided id: {id}");
-                }
-
                 var result = await _catalogItemRepository.UpdateAsync(id, name, price, year, pictureFileName, availableStock, companyId, genreId);
 
                 if (result == EntityState.Modified)
@@ -78,13 +78,13 @@ namespace WebAPI.Services.Implementations
 
         public Task<bool> RemoveAsync(int id)
         {
+            if (id < 1)
+            {
+                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
+            }
+
             return ExecuteSafeAsync(async () =>
             {
-                if (id < 1)
-                {
-                    throw new BusinessException($"Id must not be negative. Provided id: {id}");
-                }
-
                 var result = await _catalogItemRepository.RemoveAsync(id);
 
                 if (result == EntityState.Deleted)

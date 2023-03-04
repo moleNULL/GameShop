@@ -44,6 +44,38 @@ namespace Basket.UnitTests.Services
         }
 
         [Fact]
+        public async Task GetAsync_Success()
+        {
+            // arrange
+            string data = "\"data\"";
+            string expectedResult = "data";
+
+            _redisDb.Setup(x => x.StringGetAsync(
+                    It.IsAny<RedisKey>(),
+                    It.IsAny<CommandFlags>()))
+                .ReturnsAsync(data);
+
+            // act
+            string actualResult = await _cacheService.GetAsync<string>(data);
+
+            // assert
+            actualResult.Should().Be(expectedResult);
+        }
+
+        [Fact]
+        public async Task GetAsync_Failed()
+        {
+            // arrange
+            string data = "data";
+
+            // act
+            string actualResult = await _cacheService.GetAsync<string>(data);
+
+            // assert
+            actualResult.Should().BeNull();
+        }
+
+        [Fact]
         public async Task SetAsync_Success()
         {
             // arrange
@@ -93,38 +125,6 @@ namespace Basket.UnitTests.Services
 
             // assert
             actualResult.Should().BeFalse();
-        }
-
-        [Fact]
-        public async Task GetAsync_Success()
-        {
-            // arrange
-            string data = "\"data\"";
-            string expectedResult = "data";
-
-            _redisDb.Setup(x => x.StringGetAsync(
-                    It.IsAny<RedisKey>(),
-                    It.IsAny<CommandFlags>()))
-                .ReturnsAsync(data);
-
-            // act
-            string actualResult = await _cacheService.GetAsync<string>(data);
-
-            // assert
-            actualResult.Should().Be(expectedResult);
-        }
-
-        [Fact]
-        public async Task GetAsync_Failed()
-        {
-            // arrange
-            string data = "data";
-
-            // act
-            string actualResult = await _cacheService.GetAsync<string>(data);
-
-            // assert
-            actualResult.Should().BeNull();
         }
     }
 }
