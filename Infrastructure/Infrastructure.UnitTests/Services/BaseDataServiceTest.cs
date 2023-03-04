@@ -35,7 +35,7 @@ namespace Infrastructure.UnitTests.Services
         }
 
         [Fact]
-        public async Task ExecuteSafe_Failed()
+        public async Task ExecuteSafeAsync_Failed()
         {
             // arrange
 

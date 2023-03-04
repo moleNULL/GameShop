@@ -30,7 +30,7 @@ namespace WebAPI.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<CatalogItemDto> GetItemByIdAsync(int id)
+        public async Task<CatalogItemDto?> GetItemByIdAsync(int id)
         {
             if (id < 1)
             {
@@ -40,7 +40,7 @@ namespace WebAPI.Services.Implementations
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
-                var resultDto = _mapper.Map<CatalogItemDto>(resultEntity);
+                var resultDto = _mapper.Map<CatalogItemDto?>(resultEntity);
 
                 return resultDto;
             });

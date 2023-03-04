@@ -6,7 +6,7 @@ namespace WebAPI.Repositories.Interfaces
 {
     public interface ICatalogItemRepository
     {
-        Task<CatalogItemEntity> GetByIdAsync(int id);
+        Task<CatalogItemEntity?> GetByIdAsync(int id);
         Task<IEnumerable<CatalogItemEntity>> GetByCompanyAsync(string company);
         Task<IEnumerable<CatalogItemEntity>> GetByGenreAsync(string genre);
         Task<IEnumerable<CatalogCompanyEntity>> GetCompaniesAsync();

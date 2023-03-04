@@ -6,7 +6,7 @@ namespace WebAPI.Services.Interfaces
 {
     public interface ICatalogService
     {
-        Task<CatalogItemDto> GetItemByIdAsync(int id);
+        Task<CatalogItemDto?> GetItemByIdAsync(int id);
         Task<IEnumerable<CatalogItemDto>> GetItemByCompanyAsync(string company);
         Task<IEnumerable<CatalogItemDto>> GetItemByGenreAsync(string genre);
         Task<IEnumerable<CatalogCompanyDto>> GetCompaniesAsync();

@@ -2,6 +2,6 @@
 {
     public class AddItemResponse<T>
     {
-        public T Item { get; set; } = default!;
+        public T ItemId { get; set; } = default!;
     }
 }

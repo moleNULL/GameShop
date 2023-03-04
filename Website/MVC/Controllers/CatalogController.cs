@@ -1,22 +1,16 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using MVC.Models.BasketModels;
-using MVC.Models.CatalogDtos;
+﻿using Microsoft.AspNetCore.Mvc;
 using MVC.Services.Interfaces;
 using MVC.ViewModels;
-using Newtonsoft.Json;
 
 namespace MVC.Controllers
 {
     public class CatalogController : Controller
     {
-        private readonly ICatalogService _catalogService;
+        private readonly ICatalogService _basketService;
 
         public CatalogController(ICatalogService catalogService)
         {
-            _catalogService = catalogService;
+            _basketService = catalogService;
         }
 
         public async Task<IActionResult> Index(
@@ -25,7 +19,7 @@ namespace MVC.Controllers
             page ??= 0;
             itemsPage ??= 6;
 
-            var catalog = await _catalogService.GetCatalogItemsAsync(
+            var catalog = await _basketService.GetCatalogItemsAsync(
                 page.Value, itemsPage.Value, companyFilter, genreFilter);
 
             if (catalog is null)
@@ -44,8 +38,8 @@ namespace MVC.Controllers
             var vm = new IndexViewModel()
             {
                 CatalogItems = catalog.ItemList,
-                Companies = await _catalogService.GetCompaniesAsync(),
-                Genres = await _catalogService.GetGenresAsync(),
+                Companies = await _basketService.GetCompaniesAsync(),
+                Genres = await _basketService.GetGenresAsync(),
                 PaginationInfo = paginationInfo
             };
 
@@ -55,62 +49,6 @@ namespace MVC.Controllers
                 (vm.PaginationInfo.CurrentPage == 0) ? "is-disabled" : "";
 
             return View(vm);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> BasketAddAsync()
-        {
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
-
-            return View(catalogItems);
-        }
-
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> BasketAddAsync(List<string> items)
-        {
-            var basketItems = new List<BasketItemDto>();
-
-            foreach (var itemJson in items)
-            {
-                var item = JsonConvert.DeserializeObject<BasketItemDto>(itemJson);
-
-                if (item is not null)
-                {
-                    basketItems.Add(item);
-                }
-            }
-
-            if (basketItems.Count == 0)
-            {
-                ViewData["isAdded"] = false;
-            }
-            else
-            {
-                bool isAdded = await _catalogService.AddItemsToBasketAsync(basketItems);
-                ViewData["isAdded"] = isAdded;
-            }
-
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
-
-            return View(catalogItems);
-        }
-
-        [Authorize]
-        public async Task<IActionResult> BasketShowAsync()
-        {
-            var basketItems = await _catalogService.GetItemsFromBasketAsync() ?? new List<BasketItemDto>();
-
-            return View(basketItems);
-        }
-
-        [Authorize]
-        public async Task<IActionResult> BasketEmptyAsync()
-        {
-            await _catalogService.EmptyBasketAsync();
-
-            return RedirectToAction("BasketShow", "Catalog");
         }
     }
 }

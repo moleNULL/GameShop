@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Catalog.WebAPI.Models.Responses;
 using Infrastructure;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -28,16 +29,16 @@ namespace WebAPI.Controllers
             var result = await _catalogItemService.AddAsync(
                 request.Name, request.Price, request.Year, request.PictureFileName, request.AvailableStock, request.CatalogCompanyId, request.CatalogGenreId);
 
-            return Ok(result);
+            return Ok(new AddItemResponse<int?> { ItemId = result });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ItemResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetItemResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> ReadAsync(ItemByIdRequest request)
         {
             var result = await _catalogItemService.GetAsync(request.Id);
 
-            return Ok(result);
+            return Ok(new GetItemResponse { Item = result });
         }
 
         [HttpPost]
@@ -46,7 +47,7 @@ namespace WebAPI.Controllers
         {
             var result = await _catalogItemService.UpdateAsync(request.Id, request.Name, request.Price, request.Year, request.PictureFileName, request.AvailableStock, request.CatalogCompanyId, request.CatalogGenreId);
 
-            return Ok(result);
+            return Ok(new UpdateItemResponse<bool> { IsUpdated = result });
         }
 
         [HttpPost]
@@ -55,7 +56,7 @@ namespace WebAPI.Controllers
         {
             var result = await _catalogItemService.RemoveAsync(request.Id);
 
-            return Ok(result);
+            return Ok(new RemoveItemResponse<bool> { IsRemoved = result });
         }
     }
 }

@@ -38,7 +38,7 @@ namespace WebAPI.Services.Implementations
             });
         }
 
-        public Task<CatalogItemDto> GetAsync(int id)
+        public Task<CatalogItemDto?> GetAsync(int id)
         {
             if (id < 1)
             {
@@ -48,7 +48,7 @@ namespace WebAPI.Services.Implementations
             return ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
-                var resultDto = _mapper.Map<CatalogItemDto>(resultEntity);
+                var resultDto = _mapper.Map<CatalogItemDto?>(resultEntity);
 
                 return resultDto;
             });

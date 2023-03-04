@@ -11,16 +11,22 @@
 <section class="esh-catalog-filters">
     <div class="container">
         <form asp-controller="Catalog" asp-action="Index" method="post">
-            <label class="esh-catalog-label" data-title="type">
+            <label class="esh-catalog-label" data-title="company">
                 <select asp-for="@Model.CompanyFilter" asp-items="@Model.Companies" class="esh-catalog-filter"></select>
             </label>
-            <label class="esh-catalog-label" data-title="type">
+            <label class="esh-catalog-label" data-title="genre">
                 <select asp-for="@Model.GenreFilter" asp-items="@Model.Genres" class="esh-catalog-filter"></select>
             </label>
             <input class="esh-catalog-send" type="image" src="~/images/arrow-right.svg" />
             <div class="esh-catalog-basket" style="float:right; font-size:20px;">
-                <a asp-controller="Catalog" asp-action="BasketAdd" style="margin-right:30px;">Add To Basket</a>
-                <a asp-controller="Catalog" asp-action="BasketShow">Show Basket</a>
+                @if (User.Identity is not null)
+                {
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Basket" asp-action="Add" style="margin-right:30px;">Add To Basket</a>
+                        <a asp-controller="Basket" asp-action="Show">Show Basket</a>
+                    }   
+                }
             </div>
         </form>
     </div>

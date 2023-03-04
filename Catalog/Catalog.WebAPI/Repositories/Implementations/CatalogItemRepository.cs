@@ -16,14 +16,14 @@ namespace WebAPI.Repositories.Implementations
             _dbContext = dbContextWrapper.DbContext;
         }
 
-        public async Task<CatalogItemEntity> GetByIdAsync(int id)
+        public async Task<CatalogItemEntity?> GetByIdAsync(int id)
         {
             var item = await _dbContext.CatalogItems
                 .Include(ci => ci.CatalogCompany)
                 .Include(ci => ci.CatalogGenre)
                 .FirstOrDefaultAsync(ci => ci.Id == id);
 
-            return item ?? new CatalogItemEntity();
+            return item;
         }
 
         public async Task<IEnumerable<CatalogItemEntity>> GetByCompanyAsync(string company)
@@ -118,32 +118,46 @@ namespace WebAPI.Repositories.Implementations
 
         public async Task<EntityState> RemoveAsync(int id)
         {
-            var result = _dbContext.CatalogItems.Remove(new CatalogItemEntity() { Id = id });
-            EntityState state = result.State;
+            bool exists = _dbContext.CatalogItems.Any(ci => ci.Id == id);
 
-            await _dbContext.SaveChangesAsync();
+            if (exists)
+            {
+                var result = _dbContext.CatalogItems.Remove(new CatalogItemEntity() { Id = id });
+                EntityState state = result.State;
 
-            return state;
+                await _dbContext.SaveChangesAsync();
+
+                return state;
+            }
+
+            return EntityState.Unchanged;
         }
 
         public async Task<EntityState> UpdateAsync(int id, string name, decimal price, int year, string pictureFileName, int availableStock, int companyId, int genreId)
         {
-            CatalogItemEntity entity = _dbContext.CatalogItems.FirstOrDefault(ci => ci.Id == id) !;
+            bool exists = _dbContext.CatalogItems.Any(ci => ci.Id == id);
 
-            entity.Name = name;
-            entity.Price = price;
-            entity.Year = year;
-            entity.PictureFileName = pictureFileName;
-            entity.AvailableStock = availableStock;
-            entity.CatalogCompanyId = companyId;
-            entity.CatalogGenreId = genreId;
+            if (exists)
+            {
+                CatalogItemEntity entity = _dbContext.CatalogItems.FirstOrDefault(ci => ci.Id == id) !;
 
-            var result = _dbContext.CatalogItems.Update(entity);
-            EntityState state = result.State;
+                entity.Name = name;
+                entity.Price = price;
+                entity.Year = year;
+                entity.PictureFileName = pictureFileName;
+                entity.AvailableStock = availableStock;
+                entity.CatalogCompanyId = companyId;
+                entity.CatalogGenreId = genreId;
 
-            await _dbContext.SaveChangesAsync();
+                var result = _dbContext.CatalogItems.Update(entity);
+                EntityState state = result.State;
 
-            return state;
+                await _dbContext.SaveChangesAsync();
+
+                return state;
+            }
+
+            return EntityState.Unchanged;
         }
     }
 }

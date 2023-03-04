@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Catalog.WebAPI.Models.Responses;
 using Infrastructure;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Authorization;
@@ -44,12 +45,12 @@ namespace Catalog.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ItemResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetItemResponse), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetItemByIdAsync(ItemByIdRequest request)
         {
             var result = await _catalogService.GetItemByIdAsync(request.Id);
 
-            return Ok(result);
+            return Ok(new GetItemResponse { Item = result });
         }
 
         [HttpPost]
@@ -71,7 +72,7 @@ namespace Catalog.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(CompanyResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<CatalogCompanyDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetCompaniesAsync()
         {
             var result = await _catalogService.GetCompaniesAsync();
@@ -80,7 +81,7 @@ namespace Catalog.WebAPI.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(GenreResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<CatalogGenreDto>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetGenresAsync()
         {
             var result = await _catalogService.GetGenresAsync();

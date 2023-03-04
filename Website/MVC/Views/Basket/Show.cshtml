@@ -1,12 +1,12 @@
 ﻿@model IEnumerable<BasketItemDto>
 
 @{
-    ViewData["Title"] = "BasketShow";
+    ViewData["Title"] = "Show Basket";
     int count = 0;
 }
        
 <div style="display: flex; justify-content: flex-end; align-items: center; margin-right: 10px;">        
-    <a asp-controller="Catalog" asp-action="BasketAdd">
+    <a asp-controller="Basket" asp-action="Add">
         <p style="color: deepskyblue; font-size: 25px; text-align: right; margin: 0;">
             Add To Basket
         </p>
@@ -49,7 +49,7 @@
 
 @if(Model.Count() > 0)
 {
-    <form asp-controller="Catalog" asp-action="BasketEmpty" method="post">
+    <form asp-controller="Basket" asp-action="Empty" method="post">
     <input type="hidden" name="emptyBasket" value="true" />
     <button type="submit" style="background-color: #4CAF50;
         border: none;

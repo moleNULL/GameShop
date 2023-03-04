@@ -2,7 +2,7 @@
 
 namespace WebAPI.Models.Responses
 {
-    // Responses for Id, Company, Genre
+    // Responses for Company, Genre, Read
     public class ItemResponse
     {
         public int Id { get; set; }

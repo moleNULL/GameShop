@@ -11,8 +11,5 @@ namespace MVC.Services.Interfaces
         Task<IEnumerable<SelectListItem>> GetCompaniesAsync();
         Task<IEnumerable<SelectListItem>> GetGenresAsync();
         Task<IEnumerable<CatalogItemDto>> GetAllCatalogItemsAsync();
-        Task<bool> AddItemsToBasketAsync(IEnumerable<BasketItemDto> items);
-        Task<IEnumerable<BasketItemDto>> GetItemsFromBasketAsync();
-        Task<bool> EmptyBasketAsync();
     }
 }
