@@ -28,8 +28,10 @@ namespace MVC.Services.Implementations
 
             if (result is null)
             {
-                throw new BusinessException(
-                    $"Error! Unable to set data to Basket.WebAPI. Request URL: {url}");
+                string errorMessage = $"Error! Unable to set data to Basket.WebAPI. Request URL: {url}";
+
+                _logger.LogError(errorMessage);
+                throw new BusinessException(errorMessage);
             }
 
             return result.IsSet;
@@ -43,8 +45,10 @@ namespace MVC.Services.Implementations
 
             if (result is null)
             {
-                throw new BusinessException(
-                    $"Error! Unable to get data from Basket.WebAPI. Request URL: {url}");
+                string errorMessage = $"Error! Unable to get data from Basket.WebAPI. Request URL: {url}";
+
+                _logger.LogError(errorMessage);
+                throw new BusinessException(errorMessage);
             }
 
             return result.Items;
@@ -58,14 +62,19 @@ namespace MVC.Services.Implementations
 
             if (result is null)
             {
-                throw new BusinessException(
-                    $"Error! Unable to get data about emptying from Basket.WebAPI. Request URL: {url}");
+                string errorMessage = $"Error! Unable to get data about emptying from Basket.WebAPI. Request URL: {url}";
+
+                _logger.LogError(errorMessage);
+                throw new BusinessException(errorMessage);
             }
 
             var items = await GetItemsFromBasketAsync();
             if (items is not null && result.IsDeleted == false)
             {
-                throw new BusinessException($"Error! Failed to delete items from Basket.WebAPI");
+                string errorMessage = $"Error! Failed to delete items from Basket.WebAPI";
+
+                _logger.LogError(errorMessage);
+                throw new BusinessException(errorMessage);
             }
 
             return result.IsDeleted;

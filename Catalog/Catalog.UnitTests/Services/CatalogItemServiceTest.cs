@@ -17,7 +17,7 @@ namespace Catalog.UnitTests.Services
 
         private readonly Mock<IDbContextWrapper<ApplicationDbContext>> _dbContexWrapper;
 
-        private CreateItemRequest _testItemRequest = new CreateItemRequest()
+        private readonly CreateItemRequest _testItemRequest = new ()
         {
             Name = "NewGame",
             Price = 10,
@@ -28,7 +28,7 @@ namespace Catalog.UnitTests.Services
             CatalogGenreId = 1
         };
 
-        private CatalogItemEntity _testItemEntity = new CatalogItemEntity()
+        private readonly CatalogItemEntity _testItemEntity = new ()
         {
             Id = 1,
             Name = "Test Item",
@@ -42,7 +42,7 @@ namespace Catalog.UnitTests.Services
             CatalogGenre = null!
         };
 
-        private CatalogItemDto _testItemDto = new CatalogItemDto()
+        private readonly CatalogItemDto _testItemDto = new ()
         {
             Id = 1,
             Name = "Test Item",
@@ -167,25 +167,6 @@ namespace Catalog.UnitTests.Services
         }
 
         [Fact]
-        public async Task GetAsync_ThrowsException()
-        {
-            // arrange
-            int testId = 0;
-
-            _catalogItemRepository.Setup(x => x.GetByIdAsync(It.Is<int>(i => i == testId)))
-                .ReturnsAsync(_testItemEntity);
-            _mapper.Setup(x => x.Map<CatalogItemDto>(It.IsAny<CatalogItemEntity>())).Returns(_testItemDto);
-
-            // act
-            var act = async () => await _catalogItemService.GetAsync(testId);
-
-            // assert
-            await act.Should()
-                .ThrowAsync<BusinessException>()
-                .WithMessage($"Id must not be 0 or negative. Provided id: {testId}");
-        }
-
-        [Fact]
         public async Task UpdateAsync_Success()
         {
             // arrange
@@ -250,29 +231,6 @@ namespace Catalog.UnitTests.Services
         }
 
         [Fact]
-        public async Task UpdateAsync_ThrowsException()
-        {
-            // arrange
-            int testId = 0;
-
-            // act
-            var act = async () => await _catalogItemService.UpdateAsync(
-                testId,
-                _testItemRequest.Name,
-                _testItemRequest.Price,
-                _testItemRequest.Year,
-                _testItemRequest.PictureFileName,
-                _testItemRequest.AvailableStock,
-                _testItemRequest.CatalogCompanyId,
-                _testItemRequest.CatalogGenreId);
-
-            // assert
-            await act.Should()
-                .ThrowAsync<BusinessException>()
-                .WithMessage($"Id must not be 0 or negative. Provided id: {testId}");
-        }
-
-        [Fact]
         public async Task RemoveAsync_Success()
         {
             // arrange
@@ -302,21 +260,6 @@ namespace Catalog.UnitTests.Services
 
             // assert
             actualResult.Should().BeFalse();
-        }
-
-        [Fact]
-        public async Task RemoveAsync_ThrowsException()
-        {
-            // arrange
-            int testId = 0;
-
-            // act
-            var act = async () => await _catalogItemService.RemoveAsync(testId);
-
-            // assert
-            await act.Should()
-                .ThrowAsync<BusinessException>()
-                .WithMessage($"Id must not be 0 or negative. Provided id: {testId}");
         }
     }
 }

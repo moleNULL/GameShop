@@ -10,13 +10,16 @@ namespace MVC.Services.Implementations
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<HttpClientService> _logger;
 
         public HttpClientService(
             IHttpClientFactory httpClientFactory,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<HttpClientService> logger)
         {
             _httpClientFactory = httpClientFactory;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public async Task<TResponse> SendAsync<TResponse, TRequest>(string url, HttpMethod httpMethod, TRequest? content)
@@ -29,8 +32,6 @@ namespace MVC.Services.Implementations
             {
                 httpClient.SetBearerToken(token);
             }
-
-            await Console.Out.WriteLineAsync(url);
 
             var httpMessage = new HttpRequestMessage()
             {
@@ -54,7 +55,9 @@ namespace MVC.Services.Implementations
                 return response!;
             }
 
-            throw new Exception(await result.Content.ReadAsStringAsync());
+            _logger.LogError($"httpClient return unsuccessful code: {await result.Content.ReadAsStringAsync()}");
+
+            return default !;
         }
     }
 }

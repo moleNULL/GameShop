@@ -26,19 +26,20 @@ namespace MVC.Controllers
         {
             var user = _identityParser.Parse(User);
 
-            _logger.LogInformation($"User {user.Name} authenticated");
+            _logger.LogTrace($"User {user.Name} authenticated");
 
-            // "Catalog" because UrlHelper doesn't support nameof() for controllers
-            // https://github.com/aspnet/Mvc/issues/5853
             return RedirectToAction(nameof(CatalogController.Index), "Catalog");
         }
 
         public async Task<IActionResult> Signout()
         {
+            var user = _identityParser.Parse(User);
+
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
 
-            // var homeUrl = Url.Action(nameof(CatalogController));
+            _logger.LogTrace($"User {user.Name} sign out");
+
             var homeUrl = Url.Action(nameof(CatalogController.Index), "Catalog");
             return new SignOutResult(
                 OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties { RedirectUri = homeUrl });

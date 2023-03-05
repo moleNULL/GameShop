@@ -1,5 +1,4 @@
 ﻿using CatalogWebAPI.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 
 namespace CatalogWebAPI.Data
 {

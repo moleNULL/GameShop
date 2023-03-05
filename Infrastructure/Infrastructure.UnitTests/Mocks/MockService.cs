@@ -1,7 +1,5 @@
-﻿using Castle.Core.Logging;
-using Infrastructure.Services;
+﻿using Infrastructure.Services;
 using Infrastructure.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.UnitTests.Mocks
 {

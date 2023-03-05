@@ -6,7 +6,6 @@ using CatalogWebAPI.Data;
 using Infrastructure.Services.Interfaces;
 using WebAPI.Repositories.Interfaces;
 using AutoMapper;
-using Infrastructure.Exceptions;
 using WebAPI.Models.Enums;
 
 namespace WebAPI.Services.Implementations
@@ -32,11 +31,6 @@ namespace WebAPI.Services.Implementations
 
         public async Task<CatalogItemDto?> GetItemByIdAsync(int id)
         {
-            if (id < 1)
-            {
-                throw new BusinessException($"Id must not be negative. Provided id: {id}");
-            }
-
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
@@ -48,11 +42,6 @@ namespace WebAPI.Services.Implementations
 
         public async Task<IEnumerable<CatalogItemDto>> GetItemByCompanyAsync(string company)
         {
-            if (string.IsNullOrWhiteSpace(company))
-            {
-                throw new BusinessException($"Company must not be null, empty or only whitespaces");
-            }
-
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntities = await _catalogItemRepository.GetByCompanyAsync(company);
@@ -64,11 +53,6 @@ namespace WebAPI.Services.Implementations
 
         public async Task<IEnumerable<CatalogItemDto>> GetItemByGenreAsync(string genre)
         {
-            if (string.IsNullOrWhiteSpace(genre))
-            {
-                throw new BusinessException($"Genre must not be null, empty or only whitespaces");
-            }
-
             return await ExecuteSafeAsync(async () =>
             {
                 var resultEntities = await _catalogItemRepository.GetByGenreAsync(genre);
@@ -103,11 +87,6 @@ namespace WebAPI.Services.Implementations
         public async Task<PaginatedItemsResponse<CatalogItemDto>> GetCatalogItemsAsync(
             int pageIndex, int pageSize, Dictionary<CatalogTypeFilter, int?> filters)
         {
-            if (pageIndex < 0 || pageSize < 0)
-            {
-                throw new BusinessException("pageIndex or pageSize must not be negative");
-            }
-
             return await ExecuteSafeAsync(async () =>
             {
                 int? companyId = null;

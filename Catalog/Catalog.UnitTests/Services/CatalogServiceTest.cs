@@ -17,7 +17,7 @@ namespace Catalog.UnitTests.Services
 
         private readonly Mock<IDbContextWrapper<ApplicationDbContext>> _dbContextWrapper;
 
-        private CatalogItemEntity _testItemEntity = new CatalogItemEntity()
+        private readonly CatalogItemEntity _testItemEntity = new ()
         {
             Id = 1,
             Name = "Test Item",
@@ -31,7 +31,7 @@ namespace Catalog.UnitTests.Services
             CatalogGenre = null!
         };
 
-        private CatalogItemDto _testItemDto = new CatalogItemDto()
+        private readonly CatalogItemDto _testItemDto = new ()
         {
             Id = 1,
             Name = "Test Item",
@@ -116,23 +116,6 @@ namespace Catalog.UnitTests.Services
 
             // assert
             actualResult.Should().BeNull();
-        }
-
-        [Fact]
-        public async Task GetCatalogItemsAsync_ThrowsException()
-        {
-            // arrange
-            int testPageIndex = -5;
-            int testPageSize = -3;
-
-            // act
-            var act = async () => await _catalogService.GetCatalogItemsAsync(
-                testPageIndex, testPageSize, null!);
-
-            // assert
-            await act.Should()
-                .ThrowAsync<BusinessException>()
-                .WithMessage("pageIndex or pageSize must not be negative");
         }
 
         [Fact]

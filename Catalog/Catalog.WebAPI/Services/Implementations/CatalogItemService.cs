@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CatalogWebAPI.Data;
-using Infrastructure.Exceptions;
 using Infrastructure.Services;
 using Infrastructure.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -40,11 +39,6 @@ namespace WebAPI.Services.Implementations
 
         public Task<CatalogItemDto?> GetAsync(int id)
         {
-            if (id < 1)
-            {
-                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
-            }
-
             return ExecuteSafeAsync(async () =>
             {
                 var resultEntity = await _catalogItemRepository.GetByIdAsync(id);
@@ -56,45 +50,21 @@ namespace WebAPI.Services.Implementations
 
         public Task<bool> UpdateAsync(int id, string name, decimal price, int year, string pictureFileName, int availableStock, int companyId, int genreId)
         {
-            if (id < 1)
-            {
-                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
-            }
-
             return ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.UpdateAsync(id, name, price, year, pictureFileName, availableStock, companyId, genreId);
 
-                if (result == EntityState.Modified)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return result == EntityState.Modified;
             });
         }
 
         public Task<bool> RemoveAsync(int id)
         {
-            if (id < 1)
-            {
-                throw new BusinessException($"Id must not be 0 or negative. Provided id: {id}");
-            }
-
             return ExecuteSafeAsync(async () =>
             {
                 var result = await _catalogItemRepository.RemoveAsync(id);
 
-                if (result == EntityState.Deleted)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return result == EntityState.Deleted;
             });
         }
     }

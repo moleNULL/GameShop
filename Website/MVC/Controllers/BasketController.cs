@@ -4,6 +4,7 @@ using MVC.Models.BasketModels;
 using Newtonsoft.Json;
 using MVC.Models.CatalogDtos;
 using MVC.Services.Interfaces;
+using Infrastructure.Exceptions;
 
 namespace MVC.Controllers
 {
@@ -22,7 +23,16 @@ namespace MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> AddAsync()
         {
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
+            IEnumerable<CatalogItemDto>? catalogItems;
+
+            try
+            {
+                catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+            }
+            catch (BusinessException)
+            {
+                return View("Error");
+            }
 
             return View(catalogItems);
         }
@@ -42,33 +52,57 @@ namespace MVC.Controllers
                 }
             }
 
-            if (basketItems.Count == 0)
-            {
-                ViewData["isAdded"] = false;
-            }
-            else
-            {
-                bool isAdded = await _basketService.AddItemsToBasketAsync(basketItems);
-                ViewData["isAdded"] = isAdded;
-            }
+            IEnumerable<CatalogItemDto>? catalogItems;
 
-            var catalogItems = await _catalogService.GetAllCatalogItemsAsync() ?? new List<CatalogItemDto>();
+            try
+            {
+                if (basketItems.Count == 0)
+                {
+                    ViewData["isAdded"] = false;
+                }
+                else
+                {
+                    bool isAdded = await _basketService.AddItemsToBasketAsync(basketItems);
+
+                    ViewData["isAdded"] = isAdded;
+                }
+
+                catalogItems = await _catalogService.GetAllCatalogItemsAsync();
+            }
+            catch (BusinessException)
+            {
+                return View("Error");
+            }
 
             return View(catalogItems);
         }
 
-        [Authorize]
         public async Task<IActionResult> ShowAsync()
         {
-            var basketItems = await _basketService.GetItemsFromBasketAsync() ?? new List<BasketItemDto>();
+            IEnumerable<BasketItemDto> basketItems;
+
+            try
+            {
+                basketItems = await _basketService.GetItemsFromBasketAsync();
+            }
+            catch (BusinessException)
+            {
+                return View("Error");
+            }
 
             return View(basketItems);
         }
 
-        [Authorize]
         public async Task<IActionResult> EmptyAsync()
         {
-            await _basketService.EmptyBasketAsync();
+            try
+            {
+                await _basketService.EmptyBasketAsync();
+            }
+            catch (BusinessException)
+            {
+                return View("Error");
+            }
 
             return RedirectToAction("Show");
         }

@@ -36,6 +36,12 @@ namespace MVC.Services.Implementations
                 filters.Add(CatalogTypeFilter.GenreId, genreFilter.Value);
             }
 
+            if (page < 0 || itemsPerPage < 0)
+            {
+                _logger.LogWarning($"User tried to get access to a negative page or chose negative itemPage");
+                return null!;
+            }
+
             var result = await _httpClientService.SendAsync<Catalog, PaginatedItemRequest<CatalogTypeFilter>>(
                 $"{_settings.Value.CatalogUrl}/getcatalogitems",
                 HttpMethod.Post,
