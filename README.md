@@ -14,6 +14,7 @@ Techology:\
 
 MISC:\
 &nbsp;&nbsp;&nbsp;&nbsp;● Database (PostgreSQL)\
+&nbsp;&nbsp;&nbsp;&nbsp;● In-memory database (Redis)\
 &nbsp;&nbsp;&nbsp;&nbsp;● Unit tests (xUnit)\
 &nbsp;&nbsp;&nbsp;&nbsp;● Proxy (nginx)\
 &nbsp;&nbsp;&nbsp;&nbsp;● Deployment (Docker)
