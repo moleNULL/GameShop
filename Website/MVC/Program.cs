@@ -1,5 +1,4 @@
 using Infrastructure.Extensions;
-using Infrastructure.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using MVC.Configurations;
@@ -16,10 +15,7 @@ namespace MVC
             var configuration = GetConfiguration();
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add(typeof(HttpGlobalValidationActionFilter));
-            });
+            builder.Services.AddControllersWithViews();
 
             builder.AddConfiguration();
 

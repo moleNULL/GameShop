@@ -15,7 +15,7 @@ namespace Catalog.WebAPI.Controllers
     [ApiController]
     [AllowAnonymous]
     [Authorize(Policy = AuthPolicy.AllowEndUserPolicy)]
-    [Route(ComponentDefaults.CatalogDefaultRoute)] // Route("api/v1/[controller]/[action]")
+    [Route(ComponentDefaults.CatalogDefaultRoute)]
     public class CatalogBffController : ControllerBase
     {
         private readonly ICatalogService _catalogService;

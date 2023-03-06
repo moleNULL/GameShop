@@ -54,18 +54,10 @@ namespace Infrastructure.Filters
             {
                 context.Result = new BadRequestObjectResult(validationException.Message);
                 context.ExceptionHandled = true;
-
-                Console.WriteLine("WTF");
             }
 
-            string path = @"D:\1.txt";
-            string message = "hello";
-
-            // Write the string to a file.
-            using (StreamWriter writer = new StreamWriter(path))
-            {
-                writer.Write(message);
-            }
+            var statusCode = context.HttpContext.Response.StatusCode;
+            _logger.LogInformation($"Response status code: {statusCode}");
         }
     }
 }

@@ -103,10 +103,7 @@ namespace CatalogWebAPI
 
             app.UseEndpoints(endpoints =>
             {
-                // This route uses the convention of "ControllerName/ActionName/{id?}"
                 endpoints.MapDefaultControllerRoute();
-
-                // Maps all other routes for controller action methods.
                 endpoints.MapControllers();
             });
 

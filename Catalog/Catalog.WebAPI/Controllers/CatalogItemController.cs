@@ -12,6 +12,7 @@ namespace WebAPI.Controllers
 {
     [ApiController]
     [Authorize(Policy = AuthPolicy.AllowClientPolicy)]
+    [Scope("catalog.catalogitem")]
     [Route(ComponentDefaults.CatalogDefaultRoute)]
     public class CatalogItemController : ControllerBase
     {

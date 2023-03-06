@@ -63,7 +63,7 @@ namespace Basket.UnitTests.Services
             // arrange
             string? userId = "-123";
             List<ItemDto> items = null!;
-            GetItemsResponse expectedResult = new GetItemsResponse { Items = null! };
+            var expectedResult = new GetItemsResponse { Items = null! };
 
             _cacheService.Setup(x => x.GetAsync<List<ItemDto>>(It.Is<string>(i => i == userId)))
                 .ReturnsAsync(items);

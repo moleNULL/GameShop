@@ -40,7 +40,7 @@ namespace Basket.WebAPI
                             TokenUrl = new Uri($"{authority}/connect/token"),
                             Scopes = new Dictionary<string, string>()
                             {
-                                { "mvc", "website" }
+                                { "mvc", "website" },
                             }
                         }
                     }

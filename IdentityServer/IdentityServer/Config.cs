@@ -33,7 +33,7 @@ namespace IdentityServer
                         new Scope("catalog.catalogbff"),
                         new Scope("catalog.catalogitem"),
                     },
-                }
+                },
             };
         }
 
