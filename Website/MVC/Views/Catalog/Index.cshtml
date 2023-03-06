@@ -1,0 +1,67 @@
+﻿@model MVC.ViewModels.IndexViewModel
+
+@{
+    ViewData["Title"] = "Catalog";
+}
+<section class="esh-catalog-hero">
+    <div class="container">
+    </div>
+</section>
+
+<section class="esh-catalog-filters">
+    <div class="container">
+        <form asp-controller="Catalog" asp-action="Index" method="post">
+            <label class="esh-catalog-label" data-title="company">
+                <select asp-for="@Model.CompanyFilter" asp-items="@Model.Companies" class="esh-catalog-filter"></select>
+            </label>
+            <label class="esh-catalog-label" data-title="genre">
+                <select asp-for="@Model.GenreFilter" asp-items="@Model.Genres" class="esh-catalog-filter"></select>
+            </label>
+            <input class="esh-catalog-send" type="image" src="~/images/arrow-right.svg" />
+            <div class="esh-catalog-basket" style="float:right; font-size:20px;">
+                @if (User.Identity is not null)
+                {
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        <a asp-controller="Basket" asp-action="Add" style="margin-right:30px;">Add To Basket</a>
+                        <a asp-controller="Basket" asp-action="Show">Show Basket</a>
+                    }   
+                }
+            </div>
+        </form>
+    </div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <br />
+        @if(ViewBag.BasketInoperativeMsg != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                &nbsp;@ViewBag.BasketInoperativeMsg
+            </div>
+        }
+    </div>
+
+    @if (Model.CatalogItems.Count() > 0)
+    {
+    <partial name="_pagination" for="PaginationInfo" />
+
+    <div class="esh-catalog-items row">
+        @foreach (var catalogItem in Model.CatalogItems)
+            {
+        <div class="esh-catalog-item col-md-4">
+            <partial name="_product" model="catalogItem" />
+        </div>
+            }
+    </div>
+
+    <partial name="_pagination" for="PaginationInfo" />
+    }
+    else
+    {
+    <div class="esh-catalog-items row">
+        <p>THERE ARE NO GAMES THAT MATCH YOUR SEARCH</p>
+    </div>
+    }
+</div>

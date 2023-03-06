@@ -1,0 +1,34 @@
+﻿@model MVC.ViewModels.PaginationInfo
+
+<div class="esh-pager">
+    <div class="container">
+        <article class="esh-pager-wrapper row">
+            <nav>
+                <a class="esh-pager-item esh-pager-item--navigable @Model.PreviousPage"
+                    id="Previous"                    
+                    asp-controller="Catalog"
+                    asp-action="Index"
+                    asp-route-page="@(Model.CurrentPage-1)"
+                    asp-route-itemsPage="@(Model.ItemsPerPage)"
+                    aria-label="Previous">
+                    Previous
+                </a>
+
+                <span class="esh-pager-item">
+                    Showing not more than @Model.ItemsPerPage products out of @Model.TotalItems - Page @(Model.CurrentPage + 1) - @Model.TotalPages
+                </span>
+
+                <a class="esh-pager-item esh-pager-item--navigable @Model.NextPage"
+                    id="Next"                    
+                    asp-controller="Catalog"
+                    asp-action="Index"
+                    asp-route-page="@(Model.CurrentPage+1)"
+                    asp-route-itemsPage="@(Model.ItemsPerPage)"
+                    aria-label="Next">
+                    Next
+                </a>
+            </nav>
+        </article>
+    </div>
+</div>
+
